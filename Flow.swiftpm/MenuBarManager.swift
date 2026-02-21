@@ -1,7 +1,9 @@
 import SwiftUI
+
+#if os(macOS)
 import AppKit
 
-// MARK: - Menu Bar Manager (Optional Enhancement)
+// MARK: - Menu Bar Manager (macOS Only)
 
 @MainActor
 @Observable
@@ -12,7 +14,6 @@ final class MenuBarManager {
     var isAvailable: Bool = false
     
     func setup(engine: CognitiveLoadEngine, sessionManager: SessionManager, simulation: SimulationManager, audio: AudioManager, haptics: HapticsManager) {
-        // Attempt to create menubar item — silently skip if anything goes wrong
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         
         if let button = item.button {
@@ -56,7 +57,7 @@ final class MenuBarManager {
 
 extension NSApplication {
     @objc func togglePopover(_ sender: Any?) {
-        // This is a placeholder — actual toggle handled by manager
+        // Placeholder — actual toggle handled by manager
     }
 }
 
@@ -70,16 +71,13 @@ struct MenuBarPopoverView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            // Orb
             FocusOrbView(score: engine.animatedScore, size: 100)
             
-            // Score
             Text("\(Int(engine.animatedScore))")
                 .font(FlowTypography.scoreFont(size: 36))
                 .foregroundStyle(.white.opacity(0.9))
                 .contentTransition(.numericText())
             
-            // State
             Text(engine.state.label)
                 .font(FlowTypography.labelFont(size: 14))
                 .foregroundStyle(FlowColors.color(for: engine.animatedScore))
@@ -87,7 +85,6 @@ struct MenuBarPopoverView: View {
             Divider()
                 .background(.white.opacity(0.1))
             
-            // Quick event buttons
             HStack(spacing: 8) {
                 ForEach(AttentionEvent.allCases) { event in
                     Button {
@@ -113,7 +110,6 @@ struct MenuBarPopoverView: View {
                 }
             }
             
-            // Open Flow button
             Button {
                 NSApplication.shared.activate(ignoringOtherApps: true)
             } label: {
@@ -136,3 +132,23 @@ struct MenuBarPopoverView: View {
         )
     }
 }
+
+#else
+
+// MARK: - Menu Bar Manager (Stub for iOS/iPadOS)
+
+@MainActor
+@Observable
+final class MenuBarManager {
+    var isAvailable: Bool = false
+    
+    func setup(engine: CognitiveLoadEngine, sessionManager: SessionManager, simulation: SimulationManager, audio: AudioManager, haptics: HapticsManager) {
+        // Menu bar not available on iOS/iPadOS
+    }
+    
+    func togglePopover() {
+        // No-op on iOS/iPadOS
+    }
+}
+
+#endif
