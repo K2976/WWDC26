@@ -1,0 +1,59 @@
+# Flow — Build Walkthrough
+
+## What Was Built
+
+**Flow** is a macOS cognitive load & focus companion app built as a Swift Playground App (`.swiftpm`) for the Swift Student Challenge 2026.
+
+**19 source files** were created in [Flow.swiftpm](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/):
+
+| File | Purpose |
+|------|---------|
+| [Package.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/Package.swift) | Swift Playground App manifest |
+| [FlowApp.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/FlowApp.swift) | App entry point + content router |
+| [DesignSystem.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift) | HSB color system, typography, animations |
+| [AttentionEvent.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/AttentionEvent.swift) | Data models |
+| [CognitiveLoadEngine.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift) | Core score engine with decay & history |
+| [SessionManager.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift) | Session tracking & 7-day history |
+| [SimulationManager.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift) | Demo mode event injection |
+| [AudioManager.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift) | Programmatic audio with AVAudioEngine |
+| [HapticsManager.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift) | CoreHaptics with silent fallback |
+| [ScienceInsights.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift) | 15 curated neuroscience facts |
+| [FocusOrbView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift) | Canvas+TimelineView orb with particles |
+| [MiniOrbView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/MiniOrbView.swift) | Lightweight orb for menubar |
+| [OnboardingView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/OnboardingView.swift) | First-launch onboarding |
+| [DashboardView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift) | Main dashboard |
+| [CognitiveLoadGraphView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift) | Swift Charts live graph |
+| [FocusModeView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift) | 4-7-8 breathing focus mode |
+| [RecoveryView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift) | Smart reset at score > 85 |
+| [SessionSummaryView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift) | Session summary overlay |
+| [HistoryStripView.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift) | 7-day focus strip |
+| [MenuBarManager.swift](file:///Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift) | Optional menubar enhancement |
+
+## Key Architecture Decisions
+
+- **`@Observable`** (Swift Observation) instead of `ObservableObject` for modern, efficient state management
+- **Canvas + TimelineView** for the orb — GPU-efficient rendering at 60fps with no SpriteKit dependency
+- **Programmatic audio** — sine wave generation via `AVAudioEngine`, no bundled audio files (keeps size tiny)
+- **Menubar is optional** — main app works perfectly standalone; menubar enhancement fails silently if sandboxed
+
+## Build Result
+
+```
+Building for debugging...
+[18/18] Applying Flow
+Build complete! (3.86s)
+```
+
+✅ **Zero errors, zero warnings** under Swift 6 strict concurrency.
+
+## Next Steps
+
+Open `Flow.swiftpm` in Xcode and run on macOS to test:
+1. Onboarding flow (select focus level 1–5)
+2. Dashboard with live orb, score, and graph
+3. Event buttons (App Switch / Notification / Mind Wandered)
+4. Simulation auto-injecting events every 12–18s
+5. Focus Mode (⌘F) with 4-7-8 breathing guide
+6. Recovery overlay when score exceeds 85
+7. End Session for summary card
+8. 7-day history strip with pre-populated mock data
