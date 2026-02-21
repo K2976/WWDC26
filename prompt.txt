@@ -1,0 +1,435 @@
+# FLOW — Full App Development Master Prompt
+## For: Apple Swift Student Challenge 2026
+### Built with: Xcode 26, Swift, SwiftUI, targeting macOS 26
+
+---
+
+## 🧠 PROJECT OVERVIEW
+
+You are building **Flow** — a macOS cognitive load monitor and focus companion designed for students. The core concept: most students don't realize how scattered their attention is until it's too late. Flow makes the invisible visible — it gives your attention a mirror.
+
+Flow is a **menubar-first macOS app** built as an `.swiftpm` App Playground in Xcode 26. It must run entirely offline, fit within 25MB zipped, and deliver a complete, impressive experience within 3 minutes. It will be judged by Apple engineers and designers for the Swift Student Challenge 2026.
+
+**The emotional goal:** When a judge opens Flow, within 10 seconds they should feel something — calm, curiosity, or recognition. The app must feel alive, not static.
+
+---
+
+## 🏗️ TECHNICAL REQUIREMENTS (NON-NEGOTIABLE)
+
+- **Language:** Swift (latest), SwiftUI for all UI
+- **Platform:** macOS 26 (latest), targeting the current macOS release
+- **Project type:** Xcode App Playground → packaged as `.swiftpm` in ZIP under 25MB
+- **Offline:** 100% local. No network calls, no external APIs, no internet dependency
+- **Frameworks allowed:** SwiftUI, Swift Charts, CoreHaptics, AVFoundation, AppKit (for menubar), Foundation, Combine or Swift's native async/await
+- **No third-party dependencies** — everything must use Apple's native frameworks only
+- **AI disclosure note in app:** A subtle "Built with Claude" credit in the About/Info section
+
+---
+
+## 🪟 APP ARCHITECTURE — TWO SURFACES
+
+Flow lives in two places simultaneously:
+
+### Surface 1: Menubar Orb (Always Visible)
+A persistent `NSStatusItem` in the macOS menubar (where the Siri, Wi-Fi, battery icons live). This shows:
+- A **tiny animated orb** (16×16 or 18×18 pt) that pulses and changes color based on current cognitive load score
+- The **current score number** next to it (e.g. "72") in a small clean font
+- Clicking it opens a **mini popover** (280×320 pt) showing:
+  - The full-size animated orb
+  - Current score prominently displayed
+  - Current state label ("Calm", "Moderate", "Overloaded")
+  - A mini sparkline of the last 10 minutes
+  - One-tap "Log Distraction" quick buttons (3 types)
+  - A "Open Flow" button that opens the full app window
+- The menubar icon itself should animate — pulse speed and color reflect load in real time
+- **Important implementation note:** Since this is a `.swiftpm` App Playground, implement the menubar feature using `NSStatusItem` via AppKit interop within SwiftUI. If the sandbox restricts full menubar access, implement a graceful fallback where the app opens as a floating always-on-top panel instead. Handle this gracefully without crashing.
+
+### Surface 2: Full App Window
+A beautiful full-screen macOS window that opens when user clicks "Open Flow" from the popover or launches the app directly. This is where the full experience lives.
+
+---
+
+## 🎨 VISUAL IDENTITY & DESIGN SYSTEM
+
+### Color System — Reactive to Cognitive Load Score
+The ENTIRE app's color palette shifts based on the current score (0–100). This must be smooth and animated, not a sudden jump. Use linear interpolation between color stops.
+
+| Score Range | State | Primary Color | Accent | Background |
+|---|---|---|---|---|
+| 0–25 | Calm | Deep Blue (#1A3A6B) | Soft Cyan (#4FC3F7) | Near black (#080F1A) |
+| 26–50 | Focused | Indigo (#3949AB) | Lavender (#9FA8DA) | (#0D0F1E) |
+| 51–70 | Moderate | Deep Purple (#6A1B9A) | Amber (#FFB74D) | (#120A1E) |
+| 71–85 | High | Dark Orange (#E65100) | Orange (#FF8A65) | (#1A0A00) |
+| 86–100 | Overloaded | Deep Red (#B71C1C) | Bright Red (#EF5350) | (#1A0000) |
+
+All color transitions must be animated with a 1.5–2 second smooth interpolation whenever the score changes state bands.
+
+### The Focus Orb — Core Visual Element
+The orb is the soul of the app. It must feel alive at all times.
+
+**Properties that change with load score:**
+- **Size:** 180pt (calm) to 220pt (overloaded) — breathes larger when stressed
+- **Pulse speed:** 3s cycle (calm) down to 0.8s cycle (overloaded)
+- **Glow radius:** Soft 20pt blur (calm) to intense 45pt blur (overloaded)
+- **Color:** Interpolates through the color system above
+- **Shape stability:** At calm, perfectly circular. At overloaded, apply a subtle organic wobble using a custom SwiftUI Canvas path with time-based sine wave distortion on the radius
+- **Particle system:** At scores above 70, small particles drift away from the orb surface — implemented as simple SwiftUI Canvas dots with physics-like motion using TimelineView
+
+**Implementation:** Build the orb entirely in SwiftUI Canvas inside a TimelineView for frame-by-frame animation. Do not use SpriteKit or external game engines.
+
+### Typography
+- Primary font: SF Pro Rounded (via `.fontDesign(.rounded)`)
+- Score number: 72pt, weight `.black`, monospaced digits
+- State label: 18pt, weight `.medium`, letter-spaced
+- Body text: 15pt, weight `.regular`
+- Tip cards: 14pt, weight `.light`, italic for quotes
+
+### Motion Philosophy
+- Every state change must be animated — nothing should snap
+- Use `withAnimation(.spring(response: 0.6, dampingFraction: 0.75))` as the default animation curve
+- Use `matchedGeometryEffect` for transitions between normal and Focus Mode
+- Avoid default linear animations — they feel robotic
+
+---
+
+## 📱 FULL APP — SCREEN BY SCREEN
+
+### Screen 1: Onboarding (First Launch Only)
+Shown only on first launch. Clean, dark, cinematic.
+
+- App opens to a completely black screen
+- The orb fades in slowly from nothing, pulsing gently in deep blue
+- Text fades in above: "Your attention has a shape." (large, SF Pro Rounded, white)
+- 2 second pause
+- Subtext fades in: "Flow shows it to you."
+- Then: "How focused are you right now?" appears
+- Five large tap targets appear: 1 (scattered) to 5 (locked in) — styled as glowing orb fragments, not plain buttons
+- User taps their level → this sets the initial cognitive load score (1=80, 2=65, 3=45, 4=25, 5=10)
+- The orb animates to the corresponding color and pulse for their starting score
+- A smooth transition slides into the main dashboard
+- Store onboarding completion in UserDefaults so it never shows again
+
+### Screen 2: Main Dashboard
+The primary interface. Layout from top to bottom:
+
+**Header Bar (top)**
+- Left: "Flow" wordmark in SF Pro Rounded, small, the current accent color
+- Center: Current time (live updating, clean format)
+- Right: Settings gear icon + Focus Mode toggle button
+
+**Central Orb Zone (middle, dominant)**
+- The animated orb, centered, takes up roughly 40% of the vertical space
+- Below the orb: the score in huge typography ("72")
+- Below the score: state label ("High Load") in accent color
+- Below the state label: a subtle tagline that changes with state:
+  - Calm: "Your mind is clear. Keep it this way."
+  - Focused: "Good flow. Stay with it."
+  - Moderate: "Getting busy up there."
+  - High: "Your attention is scattered."
+  - Overloaded: "Time to simplify. Your brain is at capacity."
+
+**Attention Event Panel (below orb)**
+Four quick-log buttons in a horizontal row. Tapping one immediately spikes the cognitive load score by the corresponding amount and adds a marker on the graph:
+
+| Button | Icon | Score Spike | Label |
+|---|---|---|---|
+| App Switch | rectangle.2.swap | +8 | "App Switch" |
+| Notification | bell.badge | +6 | "Notification" |
+| Task Change | arrow.triangle.2.circlepath | +12 | "Task Change" |
+| Mind Wandered | cloud.fog | +5 | "Lost Focus" |
+
+Buttons styled as pill-shaped cards with the current accent color border. A tap should trigger a haptic pulse + a brief animation where the orb pulses outward once.
+
+**Live Focus Graph (below buttons)**
+- A Swift Charts `LineChart` showing cognitive load score over the current session
+- X-axis: time (last 20 minutes shown)
+- Y-axis: 0–100, with three threshold lines: 50 (moderate), 70 (high), 85 (critical) — drawn as subtle dashed horizontal rules with labels
+- The line color matches the current state color
+- Each logged event appears as a dot marker on the line
+- Smooth animated updates whenever a new data point is added
+- Below the graph: "Session started X minutes ago · Average: Y · Peak: Z"
+
+**Bottom Bar**
+- Left: "Science Tip" button (opens a tip card overlay)
+- Center: Current session duration (live timer)
+- Right: "End Session" button → goes to Session Summary screen
+
+### Screen 3: Focus Mode
+Triggered by the Focus Mode toggle. This is a full transformation — not a separate screen, but a dramatic in-place animation that removes everything except what matters.
+
+**Transition:** Use `matchedGeometryEffect` on the orb so it smoothly scales and repositions. All other elements fade out with a staggered delay (graph first, then buttons, then header).
+
+**Focus Mode Layout:**
+- Completely minimal — just the orb in the center, larger (240pt)
+- The orb now acts as a **breathing guide**: expands slowly (4 seconds inhale) → holds (7 seconds) → contracts (8 seconds). This is the 4-7-8 breathing pattern. The orb's glow expands and contracts in sync.
+- Below the orb: "Breathe" text that fades in/out with the rhythm
+- Above the orb: Session timer counting down from the chosen duration (default 25 minutes, Pomodoro style)
+- Timer ring: A thin circular progress ring around the orb perimeter that depletes as time passes
+- Top right: Small "X" to exit Focus Mode (returns to dashboard with reverse animation)
+- The ambient sound shifts to calm mode immediately on entering Focus Mode
+- Haptics shift to slow, gentle rhythmic pulses matching the breathing guide
+- Bottom: One single button — "Log Distraction" — which increments score slightly but keeps the user in Focus Mode (so they can track without breaking completely)
+
+**When Focus Session ends:**
+- A gentle chime plays (AVFoundation)
+- The orb pulses gold once
+- Text fades in: "Session complete." with the duration
+- Auto-transitions to Session Summary Card after 2 seconds
+
+### Screen 4: Session Summary Card
+A beautiful overlay card (modal sheet) that slides up from the bottom.
+
+**Content:**
+- Large header: "Session Complete" in the current accent color
+- Duration: "You focused for 47 minutes"
+- Score breakdown:
+  - Starting score vs ending score with a small delta arrow
+  - Average load score with a colored pill indicator
+  - Peak load moment with timestamp
+- Interruption count: "You logged 7 attention events" with a breakdown by type (shown as small icon + count pairs)
+- Cost insight (calculated): "Those 7 interruptions cost your brain approximately X minutes of deep focus time" — calculated as: each interruption costs 3–5 minutes of recovery time based on research
+- A science-backed insight card (randomly selected from a library of 10 real neuroscience facts about attention)
+- Two buttons: "Save to History" and "Start New Session"
+- A beautiful subtle background that uses the session's color history as a gradient — calm sessions look blue, chaotic sessions look orange-red
+
+### Screen 5: Settings
+A clean settings panel (slide-in sheet from the right side).
+
+**Options:**
+- Default Focus Session duration (15, 25, 45, 60 minutes)
+- Auto-decay rate: how fast the score naturally decreases when no events are logged (Slow / Medium / Fast)
+- Sound: On/Off + Volume slider
+- Haptics: On/Off
+- Menubar display: Score + Orb / Orb only / Orb + State label
+- Appearance: The app always uses the reactive color system, but offer an option to lock it to a specific state color if user prefers
+- About section: App version, "Built for Swift Student Challenge 2026", "AI Assistance: Claude by Anthropic was used as a coding assistant. All design, concept, and architecture by [Student Name]."
+- Reset onboarding button (for testing)
+
+---
+
+## 🔢 COGNITIVE LOAD SCORE — LOGIC ENGINE
+
+This is the brain of the app. Implement as a clean `@Observable` class called `CognitiveLoadEngine`.
+
+### Score Calculation
+- Score is a `Double` from 0.0 to 100.0
+- Initialized from onboarding input
+- **Increases** when user taps attention event buttons (by the spike amounts listed above)
+- **Auto-decays** over time when no events are logged — default 1 point per 30 seconds (configurable in settings)
+- **Hard caps:** Never goes below 0, never above 100
+- Smoothly animate the score display with every change — never jump the number, use a counting animation
+
+### Score History
+- Store score snapshots every 30 seconds in an array of `(timestamp: Date, score: Double)` tuples
+- This powers the Swift Charts graph
+- Persist history across sessions in UserDefaults as JSON
+- Maximum 7 days of history retained
+
+### State Derivation
+```swift
+enum CognitiveState {
+    case calm       // 0–25
+    case focused    // 26–50
+    case moderate   // 51–70
+    case high       // 71–85
+    case overloaded // 86–100
+}
+```
+
+### Auto-decay Timer
+Use Swift's `async/await` with a `Task` that ticks every 30 seconds and reduces the score by the configured decay rate. Cancel this task when entering Focus Mode and replace it with a faster decay (focus mode should bring the score down more aggressively — 2 points per 30 seconds — rewarding the user for focusing).
+
+---
+
+## 🔊 SOUND DESIGN (AVFoundation)
+
+Two ambient audio tracks that crossfade based on cognitive state. Since we cannot bundle large audio files, **generate the audio programmatically** using AVAudioEngine + AVAudioUnitEQ:
+
+**Calm Audio Layer:**
+Generate a soft binaural-style tone using `AVAudioSourceNode` producing a sine wave at 432Hz with a gentle LFO (0.1Hz) on the amplitude. This creates a subtle breathing sound effect without any audio files.
+
+**Stress Audio Layer:**
+Generate a slightly dissonant dual-tone using two sine waves at 440Hz and 446Hz (creates a 6Hz beat frequency — audible as tension). Fade this in as score increases above 60.
+
+**Crossfade logic:**
+- Below 50: only calm layer at full volume
+- 50–70: crossfade begins, stress layer fades in from 0% to 40%
+- 70+: calm layer fades to 30%, stress layer at 60%
+- Focus Mode: mute stress layer completely, calm layer at 80%
+
+**Event sounds:**
+- Attention event tap: short soft click (generate a 20ms 800Hz sine burst)
+- Focus Mode enter: ascending three-note chime (generate three 80ms sine bursts at 523Hz, 659Hz, 784Hz with 100ms gaps)
+- Session complete: warm descending chime (same logic, descending)
+
+All audio generation must be done programmatically — no audio files bundled.
+
+---
+
+## 📳 HAPTICS (CoreHaptics)
+
+Create a `HapticEngine` class that wraps `CHHapticEngine`.
+
+**Orb pulse haptic:** Continuous haptic pattern that matches the orb's visual pulse. Intensity and sharpness modulate with the cognitive load score.
+- Calm: intensity 0.2, sharpness 0.1, period 3s
+- Overloaded: intensity 0.7, sharpness 0.6, period 0.8s
+
+**Event tap haptic:** Short transient pattern (duration 0.1s, intensity 0.5, sharpness 0.8) on every attention event log.
+
+**Focus Mode transition haptic:** A long gentle rumble (duration 0.8s, intensity 0.3, sharpness 0.1) when entering Focus Mode — like a settling feeling.
+
+**Session complete haptic:** Three soft taps with 200ms gaps.
+
+Note: CoreHaptics is available on Mac with Apple Silicon. Add a graceful fallback check — if haptics are not supported on the device, disable silently without crashing.
+
+---
+
+## 📊 WEEKLY HEATMAP (Feature 15)
+
+A GitHub-style contribution heatmap showing focus quality across the last 28 days.
+
+**Implementation:**
+- A 7-column (days of week) × 4-row (weeks) grid of rounded squares
+- Each square's color intensity reflects that day's average cognitive load score
+- Low average score = vibrant accent color (good focus day)
+- High average score = muted gray (high stress day)
+- No data = very subtle outline square
+- Tapping a square shows a small popover: "Monday Feb 17 · Avg: 43 · Sessions: 2 · Peak: 78"
+- Store daily aggregates in UserDefaults keyed by date string
+
+Place this heatmap in a "History" tab or a scrollable section below the main dashboard graph.
+
+---
+
+## 🃏 SCIENCE TIP CARDS (Feature 13)
+
+A library of 10 science-backed tip cards that appear:
+1. When score crosses 70 for the first time in a session (threshold trigger)
+2. When user taps the "Science Tip" button in the bottom bar
+3. At the end of a session summary
+
+**Card Design:**
+- Slides up from the bottom as a sheet
+- Dark card with a subtle gradient border in the current accent color
+- An icon (SF Symbol) at the top
+- A short bold headline
+- 2–3 sentences of real neuroscience
+- A "Got it" dismiss button
+
+**The 10 tip cards (include all of these verbatim):**
+
+1. **"The Switching Tax"** — Every time you switch tasks, your brain pays a "switching cost." Research shows it takes an average of 23 minutes to fully regain deep focus after an interruption. Those small switches add up fast.
+
+2. **"Working Memory Limits"** — Your working memory can hold roughly 4 chunks of information at once. When cognitive load is high, you're forcing your brain to juggle more than it's designed to hold — things slip through.
+
+3. **"The Attention Residue Effect"** — Even after you stop a task, part of your attention stays stuck on it. Psychologist Sophie Leroy calls this "attention residue." The more tasks you switch between, the more residue accumulates.
+
+4. **"Stress and Memory"** — High cognitive load triggers mild stress responses. Cortisol, your stress hormone, actually impairs the hippocampus — the brain region responsible for forming new memories. Stressed studying is less effective studying.
+
+5. **"Flow State"** — Psychologist Mihaly Csikszentmihalyi found that humans perform best in a "flow state" — when challenge and skill are balanced and attention is unified. Low cognitive load is the gateway to flow.
+
+6. **"The Cost of Notifications"** — Studies show that just seeing a notification — even without responding — causes measurable drops in focus quality. Your brain partially engages with it whether you want it to or not.
+
+7. **"Sleep and Cognitive Load"** — Sleep deprivation dramatically increases cognitive load. A tired brain processes information 20–40% slower and struggles to filter irrelevant stimuli — making everything feel harder.
+
+8. **"The Zeigarnik Effect"** — Unfinished tasks linger in working memory, consuming cognitive resources even when you're not actively working on them. Completing or consciously "parking" tasks reduces mental noise.
+
+9. **"Breathwork and Focus"** — Slow, controlled breathing (like the 4-7-8 pattern) activates the parasympathetic nervous system, physically reducing stress hormones and resetting cognitive load within minutes.
+
+10. **"Digital Minimalism"** — Research by Cal Newport and others shows that reducing the number of apps, tabs, and inputs you monitor simultaneously doesn't just reduce stress — it measurably increases the quality of thinking during focused work.
+
+---
+
+## 🗂️ PROJECT FILE STRUCTURE
+
+```
+Flow.swiftpm/
+├── App/
+│   ├── FlowApp.swift              # App entry point, NSApplicationDelegate setup
+│   └── AppDelegate.swift          # Menubar NSStatusItem setup
+├── Engine/
+│   ├── CognitiveLoadEngine.swift  # @Observable score logic, auto-decay
+│   ├── HapticEngine.swift         # CoreHaptics wrapper
+│   └── AudioEngine.swift          # AVAudioEngine programmatic sound
+├── Views/
+│   ├── Onboarding/
+│   │   └── OnboardingView.swift
+│   ├── Dashboard/
+│   │   ├── DashboardView.swift
+│   │   ├── FocusOrb.swift         # SwiftUI Canvas orb + TimelineView
+│   │   ├── AttentionEventPanel.swift
+│   │   └── FocusGraphView.swift   # Swift Charts implementation
+│   ├── FocusMode/
+│   │   └── FocusModeView.swift
+│   ├── Summary/
+│   │   └── SessionSummaryView.swift
+│   ├── Heatmap/
+│   │   └── WeeklyHeatmapView.swift
+│   ├── Settings/
+│   │   └── SettingsView.swift
+│   └── Menubar/
+│       ├── MenubarPopoverView.swift
+│       └── MenubarOrbView.swift    # Tiny orb for status item
+├── Models/
+│   ├── CognitiveState.swift
+│   ├── AttentionEvent.swift
+│   ├── SessionData.swift
+│   └── TipCard.swift
+├── Utilities/
+│   ├── ColorSystem.swift          # Reactive color interpolation logic
+│   ├── UserDefaultsManager.swift  # Persistence layer
+│   └── Extensions.swift           # SwiftUI helpers
+└── Resources/
+    └── (empty — all assets generated in code)
+```
+
+---
+
+## 🎬 THE 3-MINUTE JUDGE EXPERIENCE (Design for This)
+
+Apple judges will spend exactly 3 minutes with your app. Design every second:
+
+**0:00–0:15** — Onboarding. The orb appears. It's beautiful. They tap their focus level. The orb reacts. They're hooked.
+
+**0:15–1:00** — Dashboard. They see the orb, the score, the graph. They tap a few attention event buttons and watch the orb pulse, the score climb, the graph spike. They feel the haptics. They hear the sound subtly shift. Everything reacts. It feels alive.
+
+**1:00–1:45** — They hit Focus Mode. The transition animation is smooth and dramatic. The orb expands. Everything fades. The breathing guide begins. The sound calms. They feel the difference physically.
+
+**1:45–2:15** — They exit Focus Mode. They see the graph shows their "session." They tap the Science Tip card. They read something genuinely interesting about their brain.
+
+**2:15–2:45** — They explore the heatmap. They open the menubar popover. They see the tiny orb in the menubar. They smile — it's a real Mac app.
+
+**2:45–3:00** — They hit "End Session." The Session Summary card slides up. They see the stats, the insight. The app feels complete, polished, real.
+
+---
+
+## ✅ COMPETITION COMPLIANCE CHECKLIST
+
+Before finalizing, verify all of these:
+
+- [ ] Runs 100% offline — no network calls anywhere in the code
+- [ ] All content is in English
+- [ ] No third-party dependencies (no Swift Package Manager external packages)
+- [ ] App playground can be opened and run in Xcode 26
+- [ ] Zipped .swiftpm is under 25MB (should be well under 5MB with programmatic audio)
+- [ ] Full experience completable within 3 minutes
+- [ ] AI usage disclosure included in Settings → About section
+- [ ] No copyrighted assets — all UI is code-drawn, all audio is programmatically generated
+- [ ] CoreHaptics fails gracefully on unsupported devices
+- [ ] Menubar feature fails gracefully if sandbox restricts NSStatusItem access
+
+---
+
+## 📝 WRITTEN DESCRIPTION (For Submission Form)
+
+Include this as a guide for the student to adapt:
+
+**App Name:** Flow
+
+**Description:** Flow is a cognitive load monitor for students — a macOS app that makes the invisible visible. Using a living, animated orb at the center of the experience, Flow tracks how scattered your attention becomes during study or work sessions, giving you a real-time "mental vital sign." As you log distractions, the orb shifts from calm blue to urgent red, the ambient sound grows tense, and haptics pulse faster — making cognitive overload something you can see, hear, and feel. Focus Mode transforms the entire app into a breathing guide and Pomodoro timer, actively helping you recover. Flow was built because the average student switches tasks every 19 seconds — and most have no idea. Built for the Swift Student Challenge 2026 using SwiftUI, Swift Charts, CoreHaptics, and AVFoundation.
+
+**AI Disclosure:** Claude by Anthropic was used as a coding assistant to help implement specific features and suggest architecture patterns. All concept, design decisions, and creative direction were developed independently.
+
+---
+
+*End of Flow Master Prompt — Build something that makes judges feel something.*
