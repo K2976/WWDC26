@@ -1,0 +1,206 @@
+FLOW — macOS Cognitive Load & Focus Companion
+Swift Student Challenge 2026
+Built with Swift, SwiftUI, Swift Charts, CoreHaptics, AVFoundation
+🧠 PROJECT OVERVIEW
+Flow is a macOS app that visualizes cognitive load in real time — turning attention into something you can see, feel, and recover from.
+Students often don’t realize how fragmented their attention has become until productivity collapses. Flow makes this invisible mental state visible through a living, reactive orb that responds instantly to distraction, overload, and calm.
+Flow is not a productivity tracker.
+It is a mirror for attention.
+The app is intentionally calm, minimal, and premium — designed to feel unmistakably Apple-like. Every animation, sound, and interaction is purposeful. Nothing is noisy. Nothing is judgmental.
+Within the first 10 seconds, a user should feel curiosity or calm.
+🏗️ TECHNICAL CONSTRAINTS (NON-NEGOTIABLE)
+Language: Swift (latest)
+UI Framework: SwiftUI only
+Platform: macOS 26
+Project Type: Xcode App Playground (.swiftpm)
+Offline: 100% local — no networking or APIs
+Allowed Frameworks:
+SwiftUI, Swift Charts, AppKit (menubar), AVFoundation, CoreHaptics, Foundation, Combine / async-await
+No third-party dependencies
+Zipped size: under 25MB
+Graceful degradation:
+Menubar and haptics must fail silently if unsupported
+🪟 APP SURFACES
+1️⃣ Menubar Presence (Primary Identity)
+Flow lives quietly in the macOS menubar as a tiny animated orb.
+Menubar behavior:
+Orb pulses continuously
+Color and pulse speed reflect current cognitive load
+Optional numeric score beside orb
+Clicking opens a minimal popover (≈280×320pt)
+Popover contents:
+Larger animated orb
+Current score
+Human-readable state label
+Tiny sparkline (last 10 minutes)
+Three quick “Log Distraction” buttons
+“Open Flow” button
+Fallback behavior:
+If menubar access is restricted by the playground sandbox:
+App automatically switches to a floating, always-on-top panel
+No crashes, no warnings
+2️⃣ Full App Window (Main Experience)
+A clean macOS window designed for focus:
+Generous spacing
+Dark, quiet backgrounds
+No dense dashboards
+Everything breathes
+🎨 DESIGN SYSTEM (MINIMAL, APPLE-CENTRIC)
+Reactive Color System
+The entire UI shifts smoothly based on cognitive load score (0–100).
+Score	State (Internal)	Display Label
+0–25	calm	Calm
+26–50	focused	In Flow
+51–70	moderate	Busy
+71–85	high	Scattered
+86–100	overloaded	Overloaded
+All color transitions animate over ~1.5–2s
+No sudden jumps
+Backgrounds remain subdued
+The Focus Orb (Core Visual Identity)
+The orb is always alive.
+Its behavior changes with cognitive load:
+Size increases slightly under stress
+Pulse accelerates as load rises
+Glow intensifies
+Shape remains perfectly circular when calm
+At high load, shape subtly distorts organically
+At high load, small particles drift away from the surface
+Implementation:
+SwiftUI Canvas + TimelineView only. No SpriteKit.
+Typography
+SF Pro Rounded
+Large, bold numerals for score
+Soft, human language
+Minimal labels
+🧭 APP FLOW
+Onboarding (First Launch Only — Tight & Fast)
+Rules:
+No long pauses
+No blocking animations
+Interaction available within 5 seconds
+Flow:
+Black screen
+Orb fades in immediately and begins breathing
+Single line of text:
+“Your attention has a shape. Flow shows it to you.”
+Prompt appears:
+“How focused are you right now?”
+Five glowing orb fragments (1–5)
+Selection sets initial cognitive load and transitions directly into the dashboard.
+Main Dashboard
+Header
+App name
+Live time
+Focus Mode toggle
+Center
+Large animated orb
+Big numeric score
+Human-readable state label
+Subtle contextual line (changes by state)
+Attention Events (3 only)
+App Switch (+8)
+Notification (+6)
+Mind Wandered (+5)
+Tapping:
+Increases score
+Triggers haptic feedback
+Orb pulses outward
+Live Graph
+Swift Charts line graph
+Last 20 minutes
+Threshold lines at 50 / 70 / 85
+Event markers
+Bottom Bar
+Science Tip
+Session timer
+End Session
+Focus Mode (Transformational, Not a Separate Screen)
+Triggered via toggle.
+Transition:
+All UI fades except orb
+Orb expands smoothly using matched geometry
+Audio shifts to calm
+Haptics slow
+Focus Mode UI:
+Central orb becomes breathing guide (4-7-8)
+Subtle “Breathe” text fades in/out
+Circular timer ring around orb
+One button: “Log Distraction”
+Minimal text only
+Session end:
+Soft chime
+Orb pulses gold
+Automatic transition to summary
+Session Summary Card
+A single elegant overlay card.
+Content:
+Session duration
+Start vs end score
+Average and peak load
+Interruption count
+One soft emotional reflection line
+Estimated recovery cost
+One science insight
+Two buttons:
+Save Session
+Start New Session
+History — 7-Day Focus Strip (Simplified)
+Only last 7 days
+Single horizontal row of rounded squares
+Color reflects daily average load
+Tap shows day summary
+Minimal. Informative. No heavy analytics.
+Smart Recovery Feature — Soft Reset
+Appears automatically when score exceeds 85.
+Behavior:
+“Reset Attention” button appears
+Triggers:
+10-second guided breathing animation
+Accelerated decay
+Calm audio emphasis
+No penalties
+No stats
+Flow helps recovery, not guilt.
+🔢 COGNITIVE LOAD ENGINE
+Score: Double (0–100)
+Deterministic, local logic
+Auto-decay every 30 seconds
+Faster decay in Focus Mode
+Hard caps at bounds
+Smooth animated number transitions
+History snapshots stored locally
+Hardcoded values are intentional and experience-driven.
+🔊 AUDIO & 📳 HAPTICS
+Audio
+Programmatically generated tones
+Calm layer + stress layer
+Smooth crossfade by load
+Focus Mode uses calm only
+Haptics
+Orb pulse mirrored haptically
+Event tap feedback
+Focus Mode settling pattern
+Disabled silently if unsupported
+🧠 SCIENCE INSIGHTS
+A curated set of real neuroscience insights about attention.
+Shown:
+On overload threshold
+Via button
+In session summary
+Concise, trustworthy, and readable.
+🎯 DESIGN PHILOSOPHY
+Minimal
+Calm
+Sensory, not analytical
+Apple-first
+Experience over metrics
+Recovery over judgment
+Flow should feel like:
+A mirror — not a manager.
+🧾 FINAL NOTE
+This app is intentionally restrained.
+Nothing exists unless it improves understanding, calm, or clarity.
+The goal is not to control attention —
+it is to notice it.
+
