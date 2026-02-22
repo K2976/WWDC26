@@ -9,9 +9,20 @@ struct SessionSummaryView: View {
     let session: SessionRecord
     
     @State private var appeared = false
-    @State private var showNameInput = false
-    @State private var sessionName = ""
-    @FocusState private var isNameFieldFocused: Bool
+    @State private var showNamePicker = false
+    @State private var selectedName: String = ""
+    
+    private let presetNames = [
+        "Deep Work",
+        "Morning Focus",
+        "Creative Session",
+        "Study Block",
+        "Research",
+        "Planning",
+        "Code Sprint",
+        "Writing",
+        "Review"
+    ]
     
     var body: some View {
         ZStack {
@@ -70,60 +81,59 @@ struct SessionSummaryView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 8)
                 
-                // Name input (shown when Save is tapped)
-                if showNameInput {
+                if showNamePicker {
+                    // Name picker — click to select, then confirm
                     VStack(spacing: 10) {
-                        Text("Name this session")
+                        Text("Choose a name for this session")
                             .font(FlowTypography.captionFont(size: 12))
                             .foregroundStyle(.white.opacity(0.5))
                         
-                        TextField("Session name...", text: $sessionName)
-                            .font(FlowTypography.bodyFont(size: 14))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 10)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(.white.opacity(0.08))
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(.white.opacity(0.12), lineWidth: 0.5)
-                            )
-                            .textFieldStyle(.plain)
-                            .focused($isNameFieldFocused)
-                            .onAppear {
-                                // Pre-fill a default name
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "h:mm a"
-                                sessionName = "Session – \(formatter.string(from: session.startTime))"
-                                
-                                // Force the app window to become key so TextField gets keyboard input
-                                #if os(macOS)
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                                    NSApplication.shared.activate(ignoringOtherApps: true)
-                                    NSApp.keyWindow?.makeKey()
+                        // Preset name grid
+                        LazyVGrid(columns: [
+                            GridItem(.flexible()),
+                            GridItem(.flexible()),
+                            GridItem(.flexible())
+                        ], spacing: 8) {
+                            ForEach(presetNames, id: \.self) { name in
+                                Button {
+                                    withAnimation(.easeInOut(duration: 0.15)) {
+                                        selectedName = name
+                                    }
+                                } label: {
+                                    Text(name)
+                                        .font(FlowTypography.captionFont(size: 11))
+                                        .foregroundStyle(selectedName == name ? .white : .white.opacity(0.7))
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 8)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(selectedName == name ?
+                                                      FlowColors.color(for: 30).opacity(0.35) :
+                                                      .white.opacity(0.06))
+                                        )
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(selectedName == name ?
+                                                        FlowColors.color(for: 30).opacity(0.5) :
+                                                        .white.opacity(0.1), lineWidth: 0.5)
+                                        )
                                 }
-                                #endif
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                    isNameFieldFocused = true
-                                }
+                                .buttonStyle(.plain)
                             }
-                            .onSubmit {
-                                sessionManager.saveSession(name: sessionName, engine: engine)
-                            }
+                        }
                         
+                        // Confirm button
                         Button {
-                            sessionManager.saveSession(name: sessionName, engine: engine)
+                            sessionManager.saveSession(name: selectedName, engine: engine)
                         } label: {
-                            Text("Save & Start New")
-                                .font(FlowTypography.bodyFont(size: 14))
+                            Text("Save as \"\(selectedName)\"")
+                                .font(FlowTypography.bodyFont(size: 13))
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
                                 .background(
                                     RoundedRectangle(cornerRadius: 10)
-                                        .fill(FlowColors.color(for: 30).opacity(0.5))
+                                        .fill(FlowColors.color(for: 30).opacity(0.4))
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 10)
@@ -138,7 +148,8 @@ struct SessionSummaryView: View {
                     HStack(spacing: 16) {
                         Button {
                             withAnimation(.easeInOut(duration: 0.25)) {
-                                showNameInput = true
+                                selectedName = defaultSessionName
+                                showNamePicker = true
                             }
                         } label: {
                             Text("Save Session")
@@ -199,6 +210,12 @@ struct SessionSummaryView: View {
                 }
             }
         }
+    }
+    
+    private var defaultSessionName: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return "Session – \(formatter.string(from: session.startTime))"
     }
     
     private func statItem(label: String, value: String) -> some View {
