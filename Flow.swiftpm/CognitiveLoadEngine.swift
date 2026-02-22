@@ -15,6 +15,7 @@ final class CognitiveLoadEngine {
     private(set) var history: [LoadSnapshot] = []
     private(set) var events: [AttentionEventRecord] = []
     private(set) var animatedScore: Double = 20.0
+    private(set) var resetTimestamps: [Date] = []
     
     var isFocusMode: Bool = false {
         didSet { updateDecayRate() }
@@ -83,10 +84,15 @@ final class CognitiveLoadEngine {
         scheduleStep(0)
     }
     
+    func markReset() {
+        resetTimestamps.append(Date())
+    }
+    
     func resetSession() {
         events.removeAll()
         history.removeAll()
         scoreHistory.removeAll()
+        resetTimestamps.removeAll()
         score = 20.0
         animatedScore = 20.0
         state = CognitiveState.from(score: score)

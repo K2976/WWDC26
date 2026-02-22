@@ -80,10 +80,10 @@ struct RecoveryView: View {
                                         ],
                                         center: .center,
                                         startRadius: 0,
-                                        endRadius: 80
+                                        endRadius: 60
                                     )
                                 )
-                                .frame(width: 120, height: 120)
+                                .frame(width: 100, height: 100)
                                 .scaleEffect(breathScale)
                                 .opacity(breathOpacity)
                             
@@ -92,9 +92,9 @@ struct RecoveryView: View {
                                 .trim(from: 0, to: recoveryProgress)
                                 .stroke(
                                     FlowColors.color(for: 25).opacity(0.5),
-                                    style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                                    style: StrokeStyle(lineWidth: 2, lineCap: .round)
                                 )
-                                .frame(width: 140, height: 140)
+                                .frame(width: 160, height: 160)
                                 .rotationEffect(.degrees(-90))
                         }
                         
@@ -145,6 +145,7 @@ struct RecoveryView: View {
         
         // Complete after 10 seconds — ensure score is at baseline
         DispatchQueue.main.asyncAfter(deadline: .now() + totalDuration) {
+            engine.markReset()
             engine.setScore(20)
             withAnimation(FlowAnimation.viewTransition) {
                 isPresented = false

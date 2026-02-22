@@ -73,6 +73,28 @@ struct CognitiveLoadGraphView: View {
                     .foregroundStyle(FlowColors.color(for: event.scoreAfter))
                     .symbolSize(20)
                 }
+                
+                // Reset markers — vertical dotted lines where recovery resets happened
+                ForEach(engine.resetTimestamps, id: \.self) { resetTime in
+                    RuleMark(x: .value("Reset", resetTime))
+                        .foregroundStyle(.white.opacity(0.25))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [3, 3]))
+                        .annotation(position: .top, alignment: .center) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "arrow.counterclockwise")
+                                    .font(.system(size: 7))
+                                Text("Reset")
+                                    .font(FlowTypography.captionFont(size: 8))
+                            }
+                            .foregroundStyle(.white.opacity(0.35))
+                            .padding(.horizontal, 4)
+                            .padding(.vertical, 2)
+                            .background(
+                                Capsule()
+                                    .fill(.white.opacity(0.06))
+                            )
+                        }
+                }
             }
             .chartYScale(domain: 0...100)
             .chartYAxis {
