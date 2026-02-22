@@ -83,7 +83,7 @@ struct RecoveryView: View {
                                         endRadius: 60
                                     )
                                 )
-                                .frame(width: 100, height: 100)
+                                .frame(width: 110, height: 110)
                                 .scaleEffect(breathScale)
                                 .opacity(breathOpacity)
                             
@@ -94,7 +94,7 @@ struct RecoveryView: View {
                                     FlowColors.color(for: 25).opacity(0.5),
                                     style: StrokeStyle(lineWidth: 2, lineCap: .round)
                                 )
-                                .frame(width: 160, height: 160)
+                                .frame(width: 148, height: 148)
                                 .rotationEffect(.degrees(-90))
                         }
                         
