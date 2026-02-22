@@ -29,21 +29,9 @@ struct HistoryStripView: View {
         .animation(FlowAnimation.viewTransition, value: selectedDay?.id)
     }
     
-    // Distinct color palette for each day of the week
-    private let dayColors: [Color] = [
-        Color(hue: 0.52, saturation: 0.6, brightness: 0.7),  // Teal
-        Color(hue: 0.65, saturation: 0.7, brightness: 0.7),  // Indigo
-        Color(hue: 0.42, saturation: 0.5, brightness: 0.65), // Green
-        Color(hue: 0.58, saturation: 0.5, brightness: 0.6),  // Steel blue
-        Color(hue: 0.78, saturation: 0.5, brightness: 0.7),  // Orchid
-        Color(hue: 0.85, saturation: 0.45, brightness: 0.7),  // Rose
-        Color(hue: 0.72, saturation: 0.6, brightness: 0.75), // Purple
-    ]
-    
     private func daySquare(_ day: DaySummary) -> some View {
         let isSelected = selectedDay?.id == day.id
-        let dayIndex = Calendar.current.component(.weekday, from: day.date) - 1 // 0-6
-        let color = dayColors[dayIndex % dayColors.count]
+        let color = FlowColors.color(for: day.averageScore)
         
         return Button {
             withAnimation {

@@ -100,13 +100,18 @@ struct FlowColors {
         return base.opacity(0.6 + (clamped / 100.0) * 0.4)
     }
     
-    /// Background color — very dark, subtle tint
+    /// Background color — dark but with noticeable tint matching the orb
     static func backgroundColor(for score: Double) -> Color {
         let clamped = min(max(score, 0), 100)
+        // Matches the orb color hues but very dark
         let stops: [(Double, Double, Double, Double)] = [
-            (0,   0.60, 0.20, 0.10),
-            (50,  0.72, 0.20, 0.10),
-            (100, 0.98, 0.25, 0.12),
+            (0,   0.60, 0.30, 0.12),   // Deep blue tint
+            (30,  0.65, 0.30, 0.12),   // Indigo tint
+            (50,  0.72, 0.30, 0.12),   // Purple tint
+            (70,  0.80, 0.30, 0.13),   // Deep purple
+            (80,  0.08, 0.40, 0.14),   // Warm orange tint
+            (90,  0.02, 0.45, 0.14),   // Red-orange tint
+            (100, 0.98, 0.45, 0.13),   // Dark red tint
         ]
         
         var lower = stops[0]
@@ -120,9 +125,10 @@ struct FlowColors {
         }
         let range = upper.0 - lower.0
         let t = range > 0 ? (clamped - lower.0) / range : 0
-        return Color(hue: lower.1 + (upper.1 - lower.1) * t,
-                     saturation: lower.2 + (upper.2 - lower.2) * t,
-                     brightness: lower.3 + (upper.3 - lower.3) * t)
+        let smoothT = t * t * (3 - 2 * t)
+        return Color(hue: lower.1 + (upper.1 - lower.1) * smoothT,
+                     saturation: lower.2 + (upper.2 - lower.2) * smoothT,
+                     brightness: lower.3 + (upper.3 - lower.3) * smoothT)
     }
 }
 
