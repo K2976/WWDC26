@@ -24,36 +24,52 @@ struct DashboardView: View {
                 .ignoresSafeArea()
                 .animation(FlowAnimation.colorTransition, value: engine.animatedScore)
             
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    // Header
-                    headerSection
-                        .padding(.horizontal, 32)
-                        .padding(.top, 16)
-                    
-                    // Center orb area
-                    orbSection
-                        .padding(.top, 24)
-                    
-                    // Event buttons
-                    eventButtonsSection
-                        .padding(.horizontal, 32)
-                        .padding(.top, 24)
-                    
-                    // Graph
-                    CognitiveLoadGraphView()
-                        .padding(.horizontal, 32)
-                        .padding(.top, 20)
-                    
-                    // History strip
-                    HistoryStripView()
-                        .padding(.horizontal, 32)
-                        .padding(.top, 16)
-                    
-                    // Bottom bar
-                    bottomBar
-                        .padding(.horizontal, 32)
-                        .padding(.vertical, 16)
+            VStack(spacing: 0) {
+                // Fixed top bar
+                headerSection
+                    .padding(.horizontal, 32)
+                    .padding(.vertical, 12)
+                    .background(
+                        FlowColors.backgroundColor(for: engine.animatedScore)
+                            .opacity(0.95)
+                            .overlay(
+                                Rectangle()
+                                    .fill(.white.opacity(0.04))
+                            )
+                    )
+                    .overlay(alignment: .bottom) {
+                        Rectangle()
+                            .fill(.white.opacity(0.06))
+                            .frame(height: 0.5)
+                    }
+                
+                // Scrollable content
+                ScrollView(.vertical, showsIndicators: true) {
+                    VStack(spacing: 0) {
+                        // Center orb area
+                        orbSection
+                            .padding(.top, 24)
+                        
+                        // Event buttons
+                        eventButtonsSection
+                            .padding(.horizontal, 32)
+                            .padding(.top, 24)
+                        
+                        // Graph
+                        CognitiveLoadGraphView()
+                            .padding(.horizontal, 32)
+                            .padding(.top, 20)
+                        
+                        // History strip
+                        HistoryStripView()
+                            .padding(.horizontal, 32)
+                            .padding(.top, 16)
+                        
+                        // Bottom bar
+                        bottomBar
+                            .padding(.horizontal, 32)
+                            .padding(.vertical, 16)
+                    }
                 }
             }
             
