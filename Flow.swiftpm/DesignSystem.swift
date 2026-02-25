@@ -132,6 +132,38 @@ struct FlowColors {
     }
 }
 
+// MARK: - Ambient Background
+
+struct AmbientBackground: View {
+    var body: some View {
+        ZStack {
+            // Deep near-black gradient
+            LinearGradient(
+                colors: [
+                    Color(hue: 0.62, saturation: 0.15, brightness: 0.06),
+                    Color(hue: 0.60, saturation: 0.10, brightness: 0.03),
+                    Color(hue: 0.58, saturation: 0.08, brightness: 0.02)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            
+            // Subtle radial vignette toward edges
+            RadialGradient(
+                colors: [
+                    .clear,
+                    .black.opacity(0.3),
+                    .black.opacity(0.6)
+                ],
+                center: .center,
+                startRadius: 100,
+                endRadius: 500
+            )
+        }
+        .ignoresSafeArea()
+    }
+}
+
 // MARK: - Typography
 
 struct FlowTypography {

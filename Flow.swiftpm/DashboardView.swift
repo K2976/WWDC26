@@ -16,63 +16,38 @@ struct DashboardView: View {
     @State private var currentTip = ScienceInsights.randomInsight()
     @State private var orbPulseAmount: CGFloat = 1.0
     @State private var currentTime = Date()
+    @State private var showDetails = false
     
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
-            // Dynamic background
-            FlowColors.backgroundColor(for: engine.animatedScore)
-                .ignoresSafeArea()
-                .animation(FlowAnimation.colorTransition, value: engine.animatedScore)
+            // Deep near-black ambient background with vignette
+            AmbientBackground()
             
             VStack(spacing: 0) {
-                // Fixed top bar
+                // Floating minimal header
                 headerSection
                     .padding(.horizontal, 32)
                     .padding(.vertical, 12)
-                    .background(
-                        FlowColors.backgroundColor(for: engine.animatedScore)
-                            .opacity(0.95)
-                            .overlay(
-                                Rectangle()
-                                    .fill(.white.opacity(0.04))
-                            )
-                    )
-                    .overlay(alignment: .bottom) {
-                        Rectangle()
-                            .fill(.white.opacity(0.06))
-                            .frame(height: 0.5)
-                    }
                 
-                // Scrollable content
-                ScrollView(.vertical, showsIndicators: true) {
-                    VStack(spacing: 0) {
-                        // Center orb area
-                        orbSection
-                            .padding(.top, 24)
-                        
-                        // Event buttons
-                        eventButtonsSection
-                            .padding(.horizontal, 32)
-                            .padding(.top, 24)
-                        
-                        // Graph
-                        CognitiveLoadGraphView()
-                            .padding(.horizontal, 32)
-                            .padding(.top, 20)
-                        
-                        // History strip
-                        HistoryStripView()
-                            .padding(.horizontal, 32)
-                            .padding(.top, 16)
-                        
-                        // Bottom bar
-                        bottomBar
-                            .padding(.horizontal, 32)
-                            .padding(.vertical, 16)
-                    }
-                }
+                Spacer()
+                
+                // Centered orb — the dominant element
+                orbSection
+                
+                Spacer()
+                
+                // Bottom controls — minimal
+                bottomControls
+                    .padding(.horizontal, 32)
+                    .padding(.bottom, 16)
+            }
+            
+            // Slide-up detail panel
+            if showDetails {
+                detailPanel
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
             // Recovery overlay
@@ -89,11 +64,9 @@ struct DashboardView: View {
             currentTime = Date()
         }
         .onChange(of: engine.score) { _, newScore in
-            // Show recovery when overloaded
             if newScore > 85 && !showRecovery && !engine.isFocusMode {
                 showRecovery = true
             }
-            // Update audio
             audio.updateForScore(newScore)
         }
         .onAppear {
@@ -101,18 +74,18 @@ struct DashboardView: View {
         }
     }
     
-    // MARK: - Header
+    // MARK: - Header (Minimal, Transparent)
     
     private var headerSection: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Flow")
-                    .font(FlowTypography.headingFont(size: 22))
-                    .foregroundStyle(.white.opacity(0.9))
+                    .font(FlowTypography.headingFont(size: 18))
+                    .foregroundStyle(.white.opacity(0.5))
                 
                 Text(currentTime, style: .time)
-                    .font(FlowTypography.captionFont(size: 13))
-                    .foregroundStyle(.white.opacity(0.4))
+                    .font(FlowTypography.captionFont(size: 11))
+                    .foregroundStyle(.white.opacity(0.2))
             }
             
             Spacer()
@@ -124,34 +97,30 @@ struct DashboardView: View {
                     sessionManager.setDemoMode(demoManager.isDemoMode)
                     
                     if demoManager.isDemoMode {
-                        // Switch to demo: stop real detection, start simulation
                         realDetector.stop()
                         simulation.userHasInteracted = false
                         simulation.startSimulation(engine: engine)
                     } else {
-                        // Switch to normal: stop simulation, start real detection
                         simulation.stopSimulation()
                         realDetector.start(engine: engine)
                     }
                 }
             } label: {
                 Text("DEMO")
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
+                    .font(.system(size: 9, weight: .bold, design: .rounded))
                     .tracking(0.5)
-                    .foregroundStyle(demoManager.isDemoMode ? .white : .white.opacity(0.35))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
+                    .foregroundStyle(demoManager.isDemoMode ? .white.opacity(0.6) : .white.opacity(0.2))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 5)
                     .background(
                         Capsule()
                             .fill(demoManager.isDemoMode ?
-                                  FlowColors.color(for: 60).opacity(0.4) :
-                                  .white.opacity(0.04))
+                                  .white.opacity(0.08) :
+                                  .white.opacity(0.03))
                     )
                     .overlay(
                         Capsule()
-                            .stroke(demoManager.isDemoMode ?
-                                    FlowColors.color(for: 60).opacity(0.5) :
-                                    .white.opacity(0.08), lineWidth: 0.5)
+                            .stroke(.white.opacity(0.06), lineWidth: 0.5)
                     )
             }
             .buttonStyle(.plain)
@@ -166,16 +135,16 @@ struct DashboardView: View {
                 }
             } label: {
                 Image(systemName: audio.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
-                    .font(.system(size: 14))
-                    .foregroundStyle(audio.isMuted ? .white.opacity(0.3) : .white.opacity(0.6))
-                    .frame(width: 36, height: 36)
+                    .font(.system(size: 12))
+                    .foregroundStyle(audio.isMuted ? .white.opacity(0.15) : .white.opacity(0.35))
+                    .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(.white.opacity(audio.isMuted ? 0.04 : 0.06))
+                            .fill(.white.opacity(0.03))
                     )
                     .overlay(
                         Circle()
-                            .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
                     )
             }
             .buttonStyle(.plain)
@@ -189,18 +158,18 @@ struct DashboardView: View {
                 }
             } label: {
                 Image(systemName: engine.isFocusMode ? "moon.fill" : "moon")
-                    .font(.system(size: 14))
-                    .foregroundStyle(engine.isFocusMode ? .white : .white.opacity(0.5))
-                    .frame(width: 36, height: 36)
+                    .font(.system(size: 12))
+                    .foregroundStyle(engine.isFocusMode ? .white.opacity(0.6) : .white.opacity(0.3))
+                    .frame(width: 32, height: 32)
                     .background(
                         Circle()
                             .fill(engine.isFocusMode ?
-                                  FlowColors.color(for: 30).opacity(0.3) :
-                                  .white.opacity(0.06))
+                                  .white.opacity(0.08) :
+                                  .white.opacity(0.03))
                     )
                     .overlay(
                         Circle()
-                            .stroke(.white.opacity(engine.isFocusMode ? 0.2 : 0.08), lineWidth: 0.5)
+                            .stroke(.white.opacity(engine.isFocusMode ? 0.1 : 0.05), lineWidth: 0.5)
                     )
             }
             .buttonStyle(.plain)
@@ -208,46 +177,167 @@ struct DashboardView: View {
         }
     }
     
-    // MARK: - Orb Section
+    // MARK: - Orb Section (Centered, Dominant)
     
     private var orbSection: some View {
-        VStack(spacing: 16) {
-            // Orb
-            FocusOrbView(score: engine.animatedScore, size: 220)
+        VStack(spacing: 20) {
+            // Large centered orb — ~40% of screen height
+            FocusOrbView(score: engine.animatedScore, size: 300)
                 .scaleEffect(orbPulseAmount)
             
-            // Score
-            Text("\(Int(engine.animatedScore))")
-                .font(FlowTypography.scoreFont(size: 56))
-                .foregroundStyle(.white.opacity(0.95))
-                .contentTransition(.numericText())
-                .animation(FlowAnimation.scoreChange, value: Int(engine.animatedScore))
-            
-            // State label
+            // State label — small, quiet, descriptive
             Text(engine.state.label)
-                .font(FlowTypography.labelFont(size: 18))
-                .foregroundStyle(FlowColors.color(for: engine.animatedScore))
-                .animation(FlowAnimation.colorTransition, value: engine.state)
+                .font(FlowTypography.captionFont(size: 14))
+                .foregroundStyle(.white.opacity(0.3))
+                .animation(.easeInOut(duration: 1.5), value: engine.state)
             
-            // Contextual line
+            // Contextual line — very low contrast
             Text(engine.state.contextualLine)
-                .font(FlowTypography.bodyFont(size: 13))
-                .foregroundStyle(.white.opacity(0.4))
+                .font(FlowTypography.bodyFont(size: 12))
+                .foregroundStyle(.white.opacity(0.18))
                 .transition(.opacity)
-                .animation(.easeInOut(duration: 1.0), value: engine.state)
+                .animation(.easeInOut(duration: 1.5), value: engine.state)
+        }
+    }
+    
+    // MARK: - Bottom Controls
+    
+    private var bottomControls: some View {
+        HStack {
+            // Session timer
+            Text(sessionManager.formattedDuration)
+                .font(FlowTypography.captionFont(size: 11))
+                .foregroundStyle(.white.opacity(0.2))
+                .monospacedDigit()
+            
+            Spacer()
+            
+            // Details toggle
+            Button {
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    showDetails.toggle()
+                }
+            } label: {
+                Image(systemName: showDetails ? "chevron.down" : "chevron.up")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundStyle(.white.opacity(0.25))
+                    .frame(width: 28, height: 28)
+                    .background(
+                        Circle()
+                            .fill(.white.opacity(0.03))
+                    )
+                    .overlay(
+                        Circle()
+                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
+                    )
+            }
+            .buttonStyle(.plain)
+            
+            Spacer()
+            
+            // End Session
+            Button {
+                sessionManager.endSession(engine: engine)
+                audio.playCompletionChime()
+                haptics.playCompletionHaptic()
+            } label: {
+                Text("End")
+                    .font(FlowTypography.captionFont(size: 11))
+                    .foregroundStyle(.white.opacity(0.25))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(
+                        Capsule().fill(.white.opacity(0.03))
+                    )
+                    .overlay(
+                        Capsule().stroke(.white.opacity(0.05), lineWidth: 0.5)
+                    )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+    
+    // MARK: - Detail Panel (Slides Up on Interaction)
+    
+    private var detailPanel: some View {
+        VStack(spacing: 0) {
+            Spacer()
+            
+            VStack(spacing: 16) {
+                // Drag handle
+                Capsule()
+                    .fill(.white.opacity(0.15))
+                    .frame(width: 36, height: 4)
+                    .padding(.top, 12)
+                
+                // Score
+                HStack(spacing: 8) {
+                    Text("\(Int(engine.animatedScore))")
+                        .font(FlowTypography.scoreFont(size: 32))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .contentTransition(.numericText())
+                        .animation(FlowAnimation.scoreChange, value: Int(engine.animatedScore))
+                    
+                    Text("cognitive load")
+                        .font(FlowTypography.captionFont(size: 11))
+                        .foregroundStyle(.white.opacity(0.2))
+                }
+                
+                // Event buttons
+                eventButtonsSection
+                    .padding(.horizontal, 24)
+                
+                // Graph
+                CognitiveLoadGraphView()
+                    .padding(.horizontal, 24)
+                
+                // History strip
+                HistoryStripView()
+                    .padding(.horizontal, 24)
+                
+                // Science tip
+                Button {
+                    currentTip = ScienceInsights.randomInsight()
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "brain.head.profile")
+                            .font(.system(size: 10))
+                        Text(currentTip)
+                            .font(FlowTypography.captionFont(size: 10))
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .foregroundStyle(.white.opacity(0.2))
+                    .frame(maxWidth: 300, alignment: .leading)
+                    .padding(.horizontal, 24)
+                }
+                .buttonStyle(.plain)
+                .padding(.bottom, 16)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(.ultraThinMaterial)
+                    .opacity(0.6)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(.white.opacity(0.06), lineWidth: 0.5)
+                    )
+            )
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
         }
     }
     
     // MARK: - Event Buttons
     
     private var eventButtonsSection: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             Text("LOG ATTENTION EVENT")
-                .font(FlowTypography.captionFont(size: 10))
-                .foregroundStyle(.white.opacity(0.3))
+                .font(FlowTypography.captionFont(size: 9))
+                .foregroundStyle(.white.opacity(0.15))
                 .tracking(1.5)
             
-            HStack(spacing: 12) {
+            HStack(spacing: 10) {
                 ForEach(AttentionEvent.allCases.filter(\.isManual)) { event in
                     eventButton(event)
                 }
@@ -259,27 +349,27 @@ struct DashboardView: View {
         Button {
             logEvent(event)
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 Image(systemName: event.symbol)
-                    .font(.system(size: 16))
+                    .font(.system(size: 14))
                 
                 Text(event.rawValue)
-                    .font(FlowTypography.captionFont(size: 11))
+                    .font(FlowTypography.captionFont(size: 10))
                 
                 Text("+\(Int(event.loadIncrease))")
-                    .font(FlowTypography.captionFont(size: 10))
-                    .foregroundStyle(.white.opacity(0.3))
+                    .font(FlowTypography.captionFont(size: 9))
+                    .foregroundStyle(.white.opacity(0.15))
             }
-            .foregroundStyle(.white.opacity(0.7))
+            .foregroundStyle(.white.opacity(0.4))
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
             .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(.white.opacity(0.05))
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(.white.opacity(0.03))
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(.white.opacity(0.05), lineWidth: 0.5)
             )
         }
         .buttonStyle(.plain)
@@ -291,7 +381,6 @@ struct DashboardView: View {
         haptics.playEventFeedback()
         audio.playEventChime()
         
-        // Orb pulse animation
         withAnimation(.easeOut(duration: 0.15)) {
             orbPulseAmount = 1.08
         }
@@ -304,18 +393,14 @@ struct DashboardView: View {
     
     private func toggleMacOSFocus(_ enabled: Bool) {
         #if os(macOS)
-        // Use shortcuts CLI to run a Focus shortcut if available,
-        // otherwise fall back to AppleScript to toggle Do Not Disturb
         Task.detached {
             let script: String
             if enabled {
                 script = """
                 tell application "System Events"
                     tell process "ControlCenter"
-                        -- Click Focus in menu bar
                         click menu bar item "Focus" of menu bar 1
                         delay 0.5
-                        -- Click Do Not Disturb
                         try
                             click checkbox "Do Not Disturb" of group 1 of section 1 of window "Control Center"
                         end try
@@ -332,7 +417,6 @@ struct DashboardView: View {
                             click checkbox "Do Not Disturb" of group 1 of section 1 of window "Control Center"
                         end try
                         delay 0.3
-                        -- Dismiss the panel
                         key code 53
                     end tell
                 end tell
@@ -345,56 +429,5 @@ struct DashboardView: View {
             }
         }
         #endif
-    }
-    
-    // MARK: - Bottom Bar
-    
-    private var bottomBar: some View {
-        HStack {
-            // Science tip
-            Button {
-                currentTip = ScienceInsights.randomInsight()
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "brain.head.profile")
-                        .font(.system(size: 12))
-                    Text(currentTip)
-                        .font(FlowTypography.captionFont(size: 11))
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                }
-                .foregroundStyle(.white.opacity(0.4))
-                .frame(maxWidth: 300, alignment: .leading)
-            }
-            .buttonStyle(.plain)
-            
-            Spacer()
-            
-            // Session timer
-            Text(sessionManager.formattedDuration)
-                .font(FlowTypography.bodyFont(size: 13))
-                .foregroundStyle(.white.opacity(0.4))
-                .monospacedDigit()
-            
-            // End Session
-            Button {
-                sessionManager.endSession(engine: engine)
-                audio.playCompletionChime()
-                haptics.playCompletionHaptic()
-            } label: {
-                Text("End Session")
-                    .font(FlowTypography.captionFont(size: 12))
-                    .foregroundStyle(.white.opacity(0.5))
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(
-                        Capsule().fill(.white.opacity(0.06))
-                    )
-                    .overlay(
-                        Capsule().stroke(.white.opacity(0.08), lineWidth: 0.5)
-                    )
-            }
-            .buttonStyle(.plain)
-        }
     }
 }
