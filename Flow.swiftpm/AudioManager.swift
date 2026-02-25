@@ -62,7 +62,7 @@ final class AudioManager {
         appendUInt16(&data, 1)                            // PCM format
         appendUInt16(&data, numChannels)
         appendUInt32(&data, UInt32(sampleRate))
-        appendUInt32(&data, UInt32(sampleRate * Double(numChannels) * Double(bytesPerSample))) // byte rate
+        appendUInt32(&data,             UInt32(sampleRate * Double(numChannels) * Double(bytesPerSample))) // byte rate
         appendUInt16(&data, numChannels * UInt16(bytesPerSample)) // block align
         appendUInt16(&data, bitsPerSample)
         
