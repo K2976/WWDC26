@@ -189,21 +189,21 @@ struct DashboardView: View {
     
     private var orbSection: some View {
         GeometryReader { geo in
-            let orbSize = min(max(geo.size.height * 0.55, 200), 600)
+            let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
             VStack(spacing: 20) {
                 // Large centered orb — scales with window height
                 FocusOrbView(score: engine.animatedScore, size: orbSize)
                 
                 // State label — small, quiet, descriptive
                 Text(engine.state.label)
-                    .font(FlowTypography.captionFont(size: 14))
-                    .foregroundStyle(.white.opacity(0.3))
+                    .font(FlowTypography.labelFont(size: 22))
+                    .foregroundStyle(.white.opacity(0.4))
                     .animation(.easeInOut(duration: 1.5), value: engine.state)
                 
                 // Contextual line — very low contrast
                 Text(engine.state.contextualLine)
-                    .font(FlowTypography.bodyFont(size: 12))
-                    .foregroundStyle(.white.opacity(0.18))
+                    .font(FlowTypography.bodyFont(size: 15))
+                    .foregroundStyle(.white.opacity(0.25))
                     .transition(.opacity)
                     .animation(.easeInOut(duration: 1.5), value: engine.state)
             }
@@ -294,9 +294,11 @@ struct DashboardView: View {
                         .foregroundStyle(.white.opacity(0.2))
                 }
                 
-                // Event buttons
-                eventButtonsSection
-                    .padding(.horizontal, 24)
+                // Event buttons (demo mode only)
+                if demoManager.isDemoMode {
+                    eventButtonsSection
+                        .padding(.horizontal, 24)
+                }
                 
                 // Graph
                 CognitiveLoadGraphView()

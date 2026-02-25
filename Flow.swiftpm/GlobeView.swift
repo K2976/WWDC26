@@ -262,6 +262,7 @@ final class GlobePlanetView: SCNView {
         velPitch = velPitch * (1 - a) + ( dy * sens / dt) * a
         lastDragPt = loc
         lastDragTS = event.timestamp
+        
     }
 
     override func mouseUp(with event: NSEvent) {
