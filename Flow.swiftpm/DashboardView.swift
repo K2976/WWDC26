@@ -44,8 +44,17 @@ struct DashboardView: View {
                     .padding(.bottom, 16)
             }
             
-            // Slide-up detail panel
+            // Slide-up detail panel with dismissible backdrop
             if showDetails {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.4)) {
+                            showDetails = false
+                        }
+                    }
+                    .transition(.opacity)
+                
                 detailPanel
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
@@ -182,7 +191,7 @@ struct DashboardView: View {
     private var orbSection: some View {
         VStack(spacing: 20) {
             // Large centered orb — ~40% of screen height
-            FocusOrbView(score: engine.animatedScore, size: 300)
+            FocusOrbView(score: engine.animatedScore, size: 360)
                 .scaleEffect(orbPulseAmount)
             
             // State label — small, quiet, descriptive

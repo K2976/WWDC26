@@ -33,186 +33,238 @@ struct FocusOrbView: View {
         }
     }
     
-    // MARK: - Drawing
+    // MARK: - Main Drawing
     
     private func drawOrb(context: GraphicsContext, size: CGSize, time: Double) {
         let center = CGPoint(x: size.width / 2, y: size.height / 2)
         let normalizedScore = min(max(score, 0), 100) / 100.0
         
         // Base radius with score-based scaling
-        let baseRadius = min(size.width, size.height) * 0.22
-        let scoreScale = 1.0 + normalizedScore * 0.25
+        let baseRadius = min(size.width, size.height) * 0.24
+        let scoreScale = 1.0 + normalizedScore * 0.2
         
-        // Score-driven pulse (existing behavior)
+        // Score-driven pulse
         let pulseSpeed = 0.5 + normalizedScore * 1.5
         let pulseAmount = 0.03 + normalizedScore * 0.07
         let scorePulse = sin(time * pulseSpeed * .pi) * pulseAmount
         
-        // Ambient breathing — slow, organic, always-on (10s cycle, ~1.5% scale)
+        // Ambient breathing (10s cycle, ~1.5%)
         let breathCycle = 10.0
         let breathPhaseVal = (time.truncatingRemainder(dividingBy: breathCycle)) / breathCycle
-        // Smooth organic easing using combined sinusoids
         let breathEase = sin(breathPhaseVal * .pi * 2) * 0.5 + sin(breathPhaseVal * .pi * 4) * 0.15
         let ambientBreath = breathEase * 0.015
         
         let radius = baseRadius * scoreScale * (1.0 + scorePulse + ambientBreath)
         
-        // Colors from existing score-reactive system
+        // Score-reactive colors
         let orbColor = FlowColors.color(for: score)
         let glowColor = FlowColors.glowColor(for: score)
         
-        // Breathing-synced light intensity shift
-        let breathLightShift = Float(breathEase * 0.08)
+        // Slow rotation angle (45s full revolution)
+        let rotationAngle = time * (.pi * 2 / 45.0)
+        let breathLight = breathEase * 0.06
         
-        // --- Layer 1: Atmospheric haze (outermost) ---
-        let hazeRadius = radius * 1.8
-        let hazePath = Path(ellipseIn: CGRect(
-            x: center.x - hazeRadius,
-            y: center.y - hazeRadius,
-            width: hazeRadius * 2,
-            height: hazeRadius * 2
-        ))
-        let hazeOpacity = 0.04 + Double(breathLightShift) * 0.5
-        context.fill(hazePath, with: .radialGradient(
-            Gradient(colors: [
-                glowColor.opacity(hazeOpacity),
-                glowColor.opacity(hazeOpacity * 0.4),
-                glowColor.opacity(0)
-            ]),
-            center: center,
-            startRadius: radius * 0.8,
-            endRadius: hazeRadius
-        ))
+        // === LAYER 1: Atmospheric glow (outermost) ===
+        drawAtmosphere(context: context, center: center, radius: radius, color: glowColor, breathLight: breathLight)
         
-        // --- Layer 2: Soft outer glow (diffuse, no hard edges) ---
-        let glowIntensity = 0.06 + normalizedScore * 0.12
-        for i in stride(from: 3, through: 1, by: -1) {
-            let glowRadius = radius * (1.0 + Double(i) * 0.12)
-            let alpha = (glowIntensity / Double(i)) + Double(breathLightShift) * 0.3
-            
-            var glowPath: Path
-            if normalizedScore > 0.7 {
-                glowPath = distortedCircle(center: center, radius: glowRadius, time: time, intensity: normalizedScore)
-            } else {
-                glowPath = Path(ellipseIn: CGRect(
-                    x: center.x - glowRadius,
-                    y: center.y - glowRadius,
-                    width: glowRadius * 2,
-                    height: glowRadius * 2
-                ))
-            }
-            
-            context.fill(glowPath, with: .color(glowColor.opacity(alpha)))
+        // === LAYER 2: Base sphere with limb darkening ===
+        let sphereRect = CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)
+        let spherePath: Path
+        if normalizedScore > 0.7 {
+            spherePath = distortedCircle(center: center, radius: radius, time: time, intensity: normalizedScore)
+        } else {
+            spherePath = Path(ellipseIn: sphereRect)
         }
         
-        // --- Layer 3: Deep core (dark volumetric interior) ---
-        let orbPath: Path
-        if normalizedScore > 0.7 {
-            orbPath = distortedCircle(center: center, radius: radius, time: time, intensity: normalizedScore)
-        } else {
-            orbPath = Path(ellipseIn: CGRect(
-                x: center.x - radius,
-                y: center.y - radius,
-                width: radius * 2,
-                height: radius * 2
+        // Dark base fill
+        context.fill(spherePath, with: .color(orbColor.opacity(0.25)))
+        
+        // === Draw all sphere-interior layers in a clipped layer ===
+        context.drawLayer { innerCtx in
+            innerCtx.clip(to: spherePath)
+            
+            // === LAYER 3: Surface bands that rotate (visible rotation) ===
+            drawSurfaceBands(context: innerCtx, center: center, radius: radius, time: time, rotationAngle: rotationAngle, color: orbColor)
+            
+            // === LAYER 4: Directional lighting (terminator - 3D illusion) ===
+            let lightAngle = rotationAngle * 0.1
+            let lightX = center.x + cos(lightAngle - .pi * 0.7) * radius * 0.5
+            let lightY = center.y + sin(lightAngle - .pi * 0.7) * radius * 0.5
+            let lightCenter = CGPoint(x: lightX, y: lightY)
+            
+            innerCtx.fill(spherePath, with: .radialGradient(
+                Gradient(colors: [
+                    orbColor.opacity(0.9 + breathLight),
+                    orbColor.opacity(0.7),
+                    orbColor.opacity(0.3),
+                    orbColor.opacity(0.05)
+                ]),
+                center: lightCenter,
+                startRadius: 0,
+                endRadius: radius * 1.6
+            ))
+            
+            // === LAYER 5: Limb darkening ===
+            innerCtx.fill(spherePath, with: .radialGradient(
+                Gradient(colors: [
+                    .clear,
+                    .clear,
+                    .black.opacity(0.2),
+                    .black.opacity(0.6)
+                ]),
+                center: center,
+                startRadius: radius * 0.3,
+                endRadius: radius
+            ))
+            
+            // === LAYER 6: Subsurface scatter ===
+            let sssOffset = CGPoint(
+                x: center.x + cos(rotationAngle * 0.3) * radius * 0.15,
+                y: center.y + sin(rotationAngle * 0.3) * radius * 0.1
+            )
+            innerCtx.fill(spherePath, with: .radialGradient(
+                Gradient(colors: [
+                    .white.opacity(0.06 + breathLight * 0.5),
+                    .white.opacity(0.02),
+                    .clear
+                ]),
+                center: sssOffset,
+                startRadius: 0,
+                endRadius: radius * 0.6
+            ))
+            
+            // === LAYER 7: Specular highlight ===
+            let specX = center.x + cos(lightAngle - .pi * 0.7) * radius * 0.35
+            let specY = center.y + sin(lightAngle - .pi * 0.7) * radius * 0.35
+            let specCenter = CGPoint(x: specX, y: specY)
+            let specRadius = radius * 0.35
+            let specPath = Path(ellipseIn: CGRect(
+                x: specCenter.x - specRadius,
+                y: specCenter.y - specRadius * 0.7,
+                width: specRadius * 2,
+                height: specRadius * 1.4
+            ))
+            innerCtx.fill(specPath, with: .radialGradient(
+                Gradient(colors: [
+                    .white.opacity(0.12 + breathLight * 0.4),
+                    .white.opacity(0.04),
+                    .clear
+                ]),
+                center: specCenter,
+                startRadius: 0,
+                endRadius: specRadius
+            ))
+            
+            // === LAYER 8: Rim light ===
+            let rimCenter = CGPoint(
+                x: center.x + cos(lightAngle - .pi * 0.7 + .pi) * radius * 0.7,
+                y: center.y + sin(lightAngle - .pi * 0.7 + .pi) * radius * 0.5
+            )
+            innerCtx.fill(spherePath, with: .radialGradient(
+                Gradient(colors: [
+                    .white.opacity(0.1 + breathLight * 0.3),
+                    .white.opacity(0.03),
+                    .clear,
+                    .clear
+                ]),
+                center: rimCenter,
+                startRadius: radius * 0.6,
+                endRadius: radius * 1.05
             ))
         }
         
-        // Multi-stop gradient: dark dense core → color body → darker edge
-        let coreGradient = Gradient(colors: [
-            orbColor.opacity(0.5),           // Dense dark core
-            orbColor.opacity(0.75),          // Mid transition
-            orbColor,                         // Full color body
-            orbColor.opacity(0.85),          // Slight fade
-            orbColor.opacity(0.55)           // Darker limb
-        ])
-        
-        // Offset light source to upper-left for 3D feel
-        let lightOffset = CGPoint(x: center.x - radius * 0.25, y: center.y - radius * 0.3)
-        context.fill(orbPath, with: .radialGradient(
-            coreGradient,
-            center: lightOffset,
-            startRadius: 0,
-            endRadius: radius * 1.3
-        ))
-        
-        // --- Layer 4: Subsurface scatter (faint internal glow, offset) ---
-        let sssRadius = radius * 0.6
-        let sssCenter = CGPoint(x: center.x - radius * 0.1, y: center.y - radius * 0.1)
-        let sssPath = Path(ellipseIn: CGRect(
-            x: sssCenter.x - sssRadius,
-            y: sssCenter.y - sssRadius,
-            width: sssRadius * 2,
-            height: sssRadius * 2
-        ))
-        let sssOpacity = 0.06 + Double(breathLightShift) * 0.4
-        context.fill(sssPath, with: .radialGradient(
-            Gradient(colors: [
-                .white.opacity(sssOpacity),
-                .white.opacity(sssOpacity * 0.3),
-                .clear
-            ]),
-            center: sssCenter,
-            startRadius: 0,
-            endRadius: sssRadius
-        ))
-        
-        // --- Layer 5: Diffuse inner highlight (soft, large, no sharp specular) ---
-        let highlightRadius = radius * 0.55
-        let highlightCenter = CGPoint(x: center.x - radius * 0.18, y: center.y - radius * 0.22)
-        let highlightPath = Path(ellipseIn: CGRect(
-            x: highlightCenter.x - highlightRadius,
-            y: highlightCenter.y - highlightRadius,
-            width: highlightRadius * 2,
-            height: highlightRadius * 1.6
-        ))
-        let highlightOpacity = 0.04 + Double(breathLightShift) * 0.3 + scorePulse * 0.03
-        context.fill(highlightPath, with: .radialGradient(
-            Gradient(colors: [
-                .white.opacity(highlightOpacity),
-                .white.opacity(highlightOpacity * 0.2),
-                .clear
-            ]),
-            center: highlightCenter,
-            startRadius: 0,
-            endRadius: highlightRadius
-        ))
-        
-        // --- Layer 6: Rim light (thin crescent, upper-right) ---
-        // Creates depth by separating orb from dark background
-        let rimPath: Path
-        if normalizedScore > 0.7 {
-            rimPath = distortedCircle(center: center, radius: radius, time: time, intensity: normalizedScore)
-        } else {
-            rimPath = Path(ellipseIn: CGRect(
-                x: center.x - radius,
-                y: center.y - radius,
-                width: radius * 2,
-                height: radius * 2
-            ))
-        }
-        
-        let rimLightCenter = CGPoint(x: center.x + radius * 0.6, y: center.y - radius * 0.5)
-        let rimOpacity = 0.08 + Double(breathLightShift) * 0.4
-        context.fill(rimPath, with: .radialGradient(
-            Gradient(colors: [
-                .white.opacity(rimOpacity),
-                .white.opacity(rimOpacity * 0.3),
-                .clear,
-                .clear
-            ]),
-            center: rimLightCenter,
-            startRadius: radius * 0.5,
-            endRadius: radius * 1.1
-        ))
-        
-        // --- Particles at high load (existing behavior) ---
+        // Particles at high load
         if normalizedScore > 0.6 {
             drawParticles(context: context, center: center, radius: radius, time: time, intensity: normalizedScore)
         }
     }
     
-    // MARK: - Distortion
+    // MARK: - Atmosphere
+    
+    private func drawAtmosphere(context: GraphicsContext, center: CGPoint, radius: Double, color: Color, breathLight: Double) {
+        // Outer atmospheric haze
+        for i in stride(from: 3, through: 1, by: -1) {
+            let hazeRadius = radius * (1.0 + Double(i) * 0.15)
+            let alpha = (0.04 + breathLight * 0.3) / Double(i)
+            let hazePath = Path(ellipseIn: CGRect(
+                x: center.x - hazeRadius,
+                y: center.y - hazeRadius,
+                width: hazeRadius * 2,
+                height: hazeRadius * 2
+            ))
+            context.fill(hazePath, with: .color(color.opacity(alpha)))
+        }
+    }
+    
+    // MARK: - Surface Bands (Rotating Features)
+    
+    private func drawSurfaceBands(context: GraphicsContext, center: CGPoint, radius: Double, time: Double, rotationAngle: Double, color: Color) {
+        // Draw multiple horizontal bands at different latitudes
+        // These scroll horizontally to create the illusion of planetary rotation
+        let bandConfigs: [(latitude: Double, width: Double, opacity: Double, speed: Double)] = [
+            (-0.6,  0.08, 0.12, 1.0),
+            (-0.35, 0.12, 0.08, 1.0),
+            (-0.1,  0.15, 0.10, 1.0),
+            ( 0.15, 0.10, 0.07, 1.0),
+            ( 0.35, 0.18, 0.09, 1.0),
+            ( 0.55, 0.06, 0.11, 1.0),
+            (-0.45, 0.05, 0.06, 0.8),
+            ( 0.0,  0.20, 0.05, 1.2),
+            ( 0.5,  0.08, 0.08, 0.9),
+        ]
+        
+        for band in bandConfigs {
+            let lat = band.latitude
+            // Spherical projection: band width compresses at poles
+            let latFactor = sqrt(max(0.01, 1.0 - lat * lat))
+            let bandHalfWidth = radius * latFactor
+            
+            let yPos = center.y + lat * radius * 0.85
+            let bandHeight = radius * band.width * latFactor
+            
+            // Horizontal scroll from rotation
+            let scrollOffset = cos(rotationAngle * band.speed + lat * 2.0) * radius * 0.3
+            
+            // Draw band as an elongated ellipse
+            let bandRect = CGRect(
+                x: center.x - bandHalfWidth + scrollOffset,
+                y: yPos - bandHeight / 2,
+                width: bandHalfWidth * 2,
+                height: bandHeight
+            )
+            
+            // Slightly brighter version of the orb color for bands
+            let bandPath = Path(ellipseIn: bandRect)
+            context.fill(bandPath, with: .color(color.opacity(band.opacity)))
+        }
+        
+        // Add a couple of "storm" spots that rotate
+        let stormCount = 2
+        for i in 0..<stormCount {
+            let stormLat = (Double(i) * 0.5 - 0.25)
+            let latFactor = sqrt(max(0.01, 1.0 - stormLat * stormLat))
+            
+            // Storm orbits around the equator
+            let stormAngle = rotationAngle + Double(i) * .pi
+            let stormX = center.x + cos(stormAngle) * radius * 0.4 * latFactor
+            let stormY = center.y + stormLat * radius * 0.85
+            
+            // Only draw when on the visible hemisphere (cos > 0 means facing us)
+            let visibility = max(0, cos(stormAngle))
+            if visibility > 0.1 {
+                let stormSize = radius * 0.12 * latFactor
+                let stormPath = Path(ellipseIn: CGRect(
+                    x: stormX - stormSize,
+                    y: stormY - stormSize * 0.6,
+                    width: stormSize * 2,
+                    height: stormSize * 1.2
+                ))
+                context.fill(stormPath, with: .color(color.opacity(0.15 * visibility)))
+            }
+        }
+    }
+    
+    // MARK: - Distortion (High Load)
     
     private func distortedCircle(center: CGPoint, radius: Double, time: Double, intensity: Double) -> Path {
         var path = Path()
@@ -221,11 +273,9 @@ struct FocusOrbView: View {
         
         for i in 0...segments {
             let angle = (Double(i) / Double(segments)) * 2.0 * .pi
-            
             let noise1 = sin(angle * 3 + time * 1.2) * distortionAmount
             let noise2 = sin(angle * 5 + time * 0.8) * distortionAmount * 0.5
             let noise3 = cos(angle * 7 + time * 1.5) * distortionAmount * 0.3
-            
             let r = radius + noise1 + noise2 + noise3
             let x = center.x + cos(angle) * r
             let y = center.y + sin(angle) * r
@@ -240,7 +290,7 @@ struct FocusOrbView: View {
         return path
     }
     
-    // MARK: - Particles
+    // MARK: - Particles (High Load)
     
     private func drawParticles(context: GraphicsContext, center: CGPoint, radius: Double, time: Double, intensity: Double) {
         let particleCount = Int((intensity - 0.6) * 25)
@@ -249,13 +299,10 @@ struct FocusOrbView: View {
         for i in 0..<particleCount {
             let seed = Double(i) * 2.399
             let particleTime = time * 0.3 + seed
-            
             let angle = seed + particleTime * 0.5
             let distance = radius * (1.1 + (sin(particleTime * 0.7) + 1) * 0.4)
-            
             let x = center.x + cos(angle) * distance
             let y = center.y + sin(angle) * distance
-            
             let particleSize = 2.0 + sin(particleTime * 2) * 1.5
             let alpha = max(0, 0.6 - (distance - radius) / (radius * 0.8))
             
@@ -265,7 +312,6 @@ struct FocusOrbView: View {
                 width: particleSize,
                 height: particleSize
             ))
-            
             context.fill(particlePath, with: .color(color.opacity(alpha)))
         }
     }
