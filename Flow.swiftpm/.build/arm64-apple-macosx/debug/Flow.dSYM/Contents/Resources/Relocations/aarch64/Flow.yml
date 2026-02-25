@@ -1,5 +1,5 @@
 ---
 triple:          'arm64-apple-darwin'
-binary-path:     '/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow'
+binary-path:     '/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow'
 relocations:     []
 ...

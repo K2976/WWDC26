@@ -16,47 +16,70 @@ struct DashboardView: View {
     @State private var currentTip = ScienceInsights.randomInsight()
     @State private var currentTime = Date()
     @State private var showDetails = false
+    @State private var isTypingMode = false
     
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
-            // Deep near-black ambient background with vignette
-            AmbientBackground()
-            
-            VStack(spacing: 0) {
-                // Floating minimal header
-                headerSection
-                    .padding(.horizontal, 32)
-                    .padding(.vertical, 12)
-                
-                Spacer()
-                
-                // Centered orb — the dominant element
-                orbSection
-                
-                Spacer()
-                
-                // Bottom controls — minimal
-                bottomControls
-                    .padding(.horizontal, 32)
-                    .padding(.bottom, 16)
-            }
-            
-            // Slide-up detail panel with dismissible backdrop
-            if showDetails {
-                Color.black.opacity(0.4)
+            // Main Dashboard Content
+            ZStack {
+                AmbientBackground()
                     .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.4)) {
-                            showDetails = false
-                        }
-                    }
-                    .transition(.opacity)
                 
-                detailPanel
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                VStack(spacing: 0) {
+                    headerSection
+                        .padding(.horizontal, 24)
+                        .padding(.top, 16)
+                    
+                    GeometryReader { geo in
+                        let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
+                        VStack(spacing: 20) {
+                            FocusOrbView(score: engine.animatedScore, size: orbSize)
+                            
+                            VStack(spacing: 8) {
+                                // State label
+                                Text(engine.state.label)
+                                    .font(FlowTypography.labelFont(size: 22))
+                                    .foregroundStyle(.white.opacity(0.4))
+                                    .animation(.easeInOut(duration: 1.5), value: engine.state)
+                                
+                                // Contextual line
+                                Text(engine.state.contextualLine)
+                                    .font(FlowTypography.bodyFont(size: 15))
+                                    .foregroundStyle(.white.opacity(0.25))
+                                    .transition(.opacity)
+                                    .animation(.easeInOut(duration: 1.5), value: engine.state)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    }
+                    
+                    Spacer()
+                    
+                    bottomControls
+                        .padding(.horizontal, 32)
+                        .padding(.bottom, 16)
+                }
+                
+                // Slide-up detail panel with dismissible backdrop
+                if showDetails {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation(.easeInOut(duration: 0.4)) {
+                                showDetails = false
+                            }
+                        }
+                        .transition(.opacity)
+                    
+                    detailPanel
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
+            // Hide main dashboard when typing mode is active
+            .opacity(isTypingMode ? 0 : 1)
+            .animation(.easeInOut(duration: 0.8), value: isTypingMode)
             
             // Recovery overlay
             if showRecovery {
@@ -66,6 +89,17 @@ struct DashboardView: View {
             // Session summary overlay
             if sessionManager.showingSummary, let session = sessionManager.lastSession {
                 SessionSummaryView(session: session)
+            }
+            
+            // Typing Test Mode
+            if isTypingMode {
+                TypingModeView {
+                    withAnimation(.easeInOut(duration: 0.8)) {
+                        isTypingMode = false
+                    }
+                }
+                .transition(.opacity)
+                .zIndex(2)
             }
         }
         .onReceive(clockTimer) { _ in
@@ -173,6 +207,27 @@ struct DashboardView: View {
             }
             .buttonStyle(.plain)
             
+            // Typing Test Mode Button
+            Button {
+                withAnimation(.easeInOut(duration: 0.8)) {
+                    isTypingMode = true
+                }
+            } label: {
+                Image(systemName: "keyboard")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.white.opacity(0.3))
+                    .frame(width: 44, height: 44)
+                    .background(
+                        Circle()
+                            .fill(.white.opacity(0.03))
+                    )
+                    .overlay(
+                        Circle()
+                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
+                    )
+            }
+            .buttonStyle(.plain)
+            
             // Focus Mode Toggle
             Button {
                 withAnimation(FlowAnimation.viewTransition) {
@@ -203,29 +258,8 @@ struct DashboardView: View {
     
     // MARK: - Orb Section (Centered, Dominant)
     
-    private var orbSection: some View {
-        GeometryReader { geo in
-            let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
-            VStack(spacing: 20) {
-                // Large centered orb — scales with window height
-                FocusOrbView(score: engine.animatedScore, size: orbSize)
-                
-                // State label — small, quiet, descriptive
-                Text(engine.state.label)
-                    .font(FlowTypography.labelFont(size: 22))
-                    .foregroundStyle(.white.opacity(0.4))
-                    .animation(.easeInOut(duration: 1.5), value: engine.state)
-                
-                // Contextual line — very low contrast
-                Text(engine.state.contextualLine)
-                    .font(FlowTypography.bodyFont(size: 15))
-                    .foregroundStyle(.white.opacity(0.25))
-                    .transition(.opacity)
-                    .animation(.easeInOut(duration: 1.5), value: engine.state)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-    }
+    // This section is now integrated directly into the body's main VStack.
+    // The `orbSection` private var is no longer needed.
     
     // MARK: - Bottom Controls
     

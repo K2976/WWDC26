@@ -19,127 +19,142 @@
   "swiftCommands" : {
     "C.Flow-arm64-apple-macosx26.0-debug.module" : {
       "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
-      "fileList" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources",
-      "importPath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules",
+      "fileList" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources",
+      "importPath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules",
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AttentionEvent.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/AttentionEvent.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/AudioManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadEngine.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadGraphView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DashboardView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DemoManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DesignSystem.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FlowApp.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FlowApp.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusModeView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusOrbView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/GlobeView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/HapticsManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/HistoryStripView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MiniOrbView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/MenuBarManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/OnboardingView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/MiniOrbView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RealEventDetector.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/OnboardingView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/RealEventDetector.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/RecoveryView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/ScienceInsights.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionSummaryView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SimulationManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingModeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources"
         }
       ],
       "isLibrary" : false,
       "moduleName" : "Flow",
-      "moduleOutputPath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules/Flow.swiftmodule",
+      "moduleOutputPath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules/Flow.swiftmodule",
       "objects" : [
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/GlobeView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingEngine.swift.o",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingModeView.swift.o"
       ],
       "otherArguments" : [
         "-target",
@@ -148,7 +163,7 @@
         "-enable-batch-mode",
         "-serialize-diagnostics",
         "-index-store-path",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/index/store",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/index/store",
         "-Onone",
         "-enable-testing",
         "-j8",
@@ -156,12 +171,13 @@
         "-DDEBUG",
         "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
         "-module-cache-path",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache",
         "-parseable-output",
         "-Xfrontend",
         "-entry-point-function-name",
         "-Xfrontend",
         "Flow_main",
+        "-color-diagnostics",
         "-swift-version",
         "6",
         "-I",
@@ -184,122 +200,137 @@
         "-package-name",
         "flow_swiftpm"
       ],
-      "outputFileMapPath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/output-file-map.json",
+      "outputFileMapPath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/output-file-map.json",
       "outputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/GlobeView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules/Flow.swiftmodule"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingModeView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules/Flow.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AttentionEvent.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FlowApp.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MiniOrbView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/OnboardingView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RealEventDetector.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift",
-        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift"
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/AttentionEvent.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/AudioManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadEngine.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadGraphView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/DashboardView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/DemoManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/DesignSystem.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/FlowApp.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusModeView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusOrbView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/GlobeView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/HapticsManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/HistoryStripView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/MenuBarManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/MiniOrbView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/OnboardingView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/RealEventDetector.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/RecoveryView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/ScienceInsights.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionSummaryView.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/SimulationManager.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingEngine.swift",
+        "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingModeView.swift"
       ],
-      "tempsPath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build",
+      "tempsPath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build",
       "wholeModuleOptimization" : false
     }
   },
@@ -314,36 +345,39 @@
       "-package-name",
       "flow_swiftpm",
       "-c",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AttentionEvent.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FlowApp.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MiniOrbView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/OnboardingView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RealEventDetector.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/AttentionEvent.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/AudioManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadEngine.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadGraphView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/DashboardView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/DemoManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/DesignSystem.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/FlowApp.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusModeView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusOrbView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/GlobeView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/HapticsManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/HistoryStripView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/MenuBarManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/MiniOrbView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/OnboardingView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/RealEventDetector.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/RecoveryView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/ScienceInsights.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionSummaryView.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/SimulationManager.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingEngine.swift",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingModeView.swift",
       "-I",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Modules",
       "-target",
       "arm64-apple-macosx15.0",
       "-incremental",
       "-enable-batch-mode",
       "-serialize-diagnostics",
       "-index-store-path",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/index/store",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/index/store",
       "-Onone",
       "-enable-testing",
       "-j8",
@@ -351,12 +385,13 @@
       "-DDEBUG",
       "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
       "-module-cache-path",
-      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache",
+      "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/ModuleCache",
       "-parseable-output",
       "-Xfrontend",
       "-entry-point-function-name",
       "-Xfrontend",
       "Flow_main",
+      "-color-diagnostics",
       "-swift-version",
       "6",
       "-I",
@@ -399,7 +434,7 @@
     }
   },
   "writeCommands" : {
-    "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow-entitlement.plist" : {
+    "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow-entitlement.plist" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -411,9 +446,9 @@
           "name" : "<com.apple.security.get-task-allow>"
         }
       ],
-      "outputFilePath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow-entitlement.plist"
+      "outputFilePath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow-entitlement.plist"
     },
-    "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources" : {
+    "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -422,92 +457,104 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AttentionEvent.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/AttentionEvent.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/AudioManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadEngine.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/CognitiveLoadGraphView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DashboardView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DemoManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/DesignSystem.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FlowApp.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FlowApp.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusModeView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/FocusOrbView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/GlobeView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/HapticsManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/HistoryStripView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MiniOrbView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/MenuBarManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/OnboardingView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/MiniOrbView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RealEventDetector.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/OnboardingView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/RealEventDetector.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/RecoveryView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/ScienceInsights.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionManager.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SessionSummaryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/SimulationManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingEngine.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/TypingModeView.swift"
         }
       ],
-      "outputFilePath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources"
+      "outputFilePath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/sources"
     },
-    "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.product/Objects.LinkFileList" : {
+    "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.product/Objects.LinkFileList" : {
       "alwaysOutOfDate" : false,
       "inputs" : [
         {
@@ -516,92 +563,104 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AttentionEvent.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FlowApp.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/GlobeView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/MiniOrbView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/OnboardingView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RealEventDetector.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o"
         },
         {
           "kind" : "file",
-          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingEngine.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/TypingModeView.swift.o"
         }
       ],
-      "outputFilePath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.product/Objects.LinkFileList"
+      "outputFilePath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.product/Objects.LinkFileList"
     },
-    "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+    "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
       "alwaysOutOfDate" : true,
       "inputs" : [
         {
@@ -613,7 +672,7 @@
           "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
         }
       ],
-      "outputFilePath" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+      "outputFilePath" : "/Users/kartik/Documents/Flow/Flow.swiftpm/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
     }
   }
 }
