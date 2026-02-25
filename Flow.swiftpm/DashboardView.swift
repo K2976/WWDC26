@@ -88,13 +88,29 @@ struct DashboardView: View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Flow")
-                    .font(FlowTypography.headingFont(size: 18))
+                    .font(FlowTypography.headingFont(size: 26))
                     .foregroundStyle(.white.opacity(0.5))
                 
                 Text(currentTime, style: .time)
-                    .font(FlowTypography.captionFont(size: 11))
-                    .foregroundStyle(.white.opacity(0.2))
+                    .font(FlowTypography.captionFont(size: 15))
+                    .foregroundStyle(.white.opacity(0.25))
             }
+            
+            Spacer()
+            
+            // Score Meter (Big, Top Center-Right)
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("\(Int(engine.animatedScore))")
+                    .font(FlowTypography.headingFont(size: 64))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: Int(engine.animatedScore))
+                
+                Text("cognitive load")
+                    .font(FlowTypography.labelFont(size: 18))
+                    .foregroundStyle(.white.opacity(0.35))
+            }
+            .padding(.trailing, 24)
             
             Spacer()
             
@@ -115,11 +131,11 @@ struct DashboardView: View {
                 }
             } label: {
                 Text("DEMO")
-                    .font(.system(size: 9, weight: .bold, design: .rounded))
-                    .tracking(0.5)
-                    .foregroundStyle(demoManager.isDemoMode ? .white.opacity(0.6) : .white.opacity(0.2))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 5)
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .tracking(0.6)
+                    .foregroundStyle(demoManager.isDemoMode ? .white.opacity(0.6) : .white.opacity(0.25))
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
                     .background(
                         Capsule()
                             .fill(demoManager.isDemoMode ?
@@ -143,9 +159,9 @@ struct DashboardView: View {
                 }
             } label: {
                 Image(systemName: audio.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
-                    .font(.system(size: 12))
+                    .font(.system(size: 16))
                     .foregroundStyle(audio.isMuted ? .white.opacity(0.15) : .white.opacity(0.35))
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
                     .background(
                         Circle()
                             .fill(.white.opacity(0.03))
@@ -166,9 +182,9 @@ struct DashboardView: View {
                 }
             } label: {
                 Image(systemName: engine.isFocusMode ? "moon.fill" : "moon")
-                    .font(.system(size: 12))
+                    .font(.system(size: 16))
                     .foregroundStyle(engine.isFocusMode ? .white.opacity(0.6) : .white.opacity(0.3))
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
                     .background(
                         Circle()
                             .fill(engine.isFocusMode ?
@@ -329,11 +345,10 @@ struct DashboardView: View {
             }
             .background(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .opacity(0.6)
+                    .fill(Color(hue: 0.62, saturation: 0.35, brightness: 0.12).opacity(0.92))
                     .overlay(
                         RoundedRectangle(cornerRadius: 20, style: .continuous)
-                            .stroke(.white.opacity(0.06), lineWidth: 0.5)
+                            .stroke(.white.opacity(0.08), lineWidth: 0.5)
                     )
             )
             .padding(.horizontal, 16)
