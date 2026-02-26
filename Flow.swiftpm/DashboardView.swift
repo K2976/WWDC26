@@ -224,8 +224,8 @@ struct DashboardView: View {
         HStack {
             // Session timer
             Text(sessionManager.formattedDuration)
-                .font(FlowTypography.captionFont(size: 11))
-                .foregroundStyle(.white.opacity(0.2))
+                .font(FlowTypography.captionFont(size: 15))
+                .foregroundStyle(.white.opacity(0.6))
                 .monospacedDigit()
             
             Spacer()
@@ -237,16 +237,16 @@ struct DashboardView: View {
                 }
             } label: {
                 Image(systemName: showDetails ? "chevron.down" : "chevron.up")
-                    .font(.system(size: 10, weight: .medium))
-                    .foregroundStyle(.white.opacity(0.25))
-                    .frame(width: 28, height: 28)
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .frame(width: 44, height: 44)
                     .background(
                         Circle()
-                            .fill(.white.opacity(0.03))
+                            .fill(.white.opacity(0.1))
                     )
                     .overlay(
                         Circle()
-                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
+                            .stroke(.white.opacity(0.2), lineWidth: 1)
                     )
             }
             .buttonStyle(.plain)
@@ -260,15 +260,15 @@ struct DashboardView: View {
                 haptics.playCompletionHaptic()
             } label: {
                 Text("End")
-                    .font(FlowTypography.captionFont(size: 11))
-                    .foregroundStyle(.white.opacity(0.25))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
+                    .font(FlowTypography.captionFont(size: 15))
+                    .foregroundStyle(.white.opacity(0.8))
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
                     .background(
-                        Capsule().fill(.white.opacity(0.03))
+                        Capsule().fill(.white.opacity(0.1))
                     )
                     .overlay(
-                        Capsule().stroke(.white.opacity(0.05), lineWidth: 0.5)
+                        Capsule().stroke(.white.opacity(0.2), lineWidth: 1)
                     )
             }
             .buttonStyle(.plain)
