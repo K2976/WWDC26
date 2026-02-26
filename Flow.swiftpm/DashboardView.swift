@@ -105,15 +105,7 @@ struct DashboardView: View {
     
     private var headerSection: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 2) {
-                Text("Flow")
-                    .font(FlowTypography.headingFont(size: 26))
-                    .foregroundStyle(.white.opacity(0.5))
-                
-                Text(currentTime, style: .time)
-                    .font(FlowTypography.captionFont(size: 15))
-                    .foregroundStyle(.white.opacity(0.25))
-            }
+            CompactFlipClockView(date: currentTime)
             
             Spacer()
             

@@ -30,6 +30,13 @@
     "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swiftdeps",
     "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.dia"
   },
+  "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CompactFlipClockView.swift": {
+    "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.d",
+    "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.swift.o",
+    "swiftmodule": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView~partial.swiftmodule",
+    "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.swiftdeps",
+    "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.dia"
+  },
   "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift": {
     "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.d",
     "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o",

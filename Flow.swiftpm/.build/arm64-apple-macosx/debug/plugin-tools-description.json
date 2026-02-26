@@ -40,6 +40,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CompactFlipClockView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift"
         },
         {
@@ -127,6 +131,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/AudioManager.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadEngine.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DashboardView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DemoManager.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/DesignSystem.swift.o",
@@ -207,6 +212,10 @@
         {
           "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.swift.o"
         },
         {
           "kind" : "file",
@@ -291,6 +300,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CompactFlipClockView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift",
@@ -329,6 +339,7 @@
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/AudioManager.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadEngine.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CognitiveLoadGraphView.swift",
+      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CompactFlipClockView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DemoManager.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DesignSystem.swift",
@@ -451,6 +462,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/CompactFlipClockView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/DashboardView.swift"
         },
         {
@@ -546,6 +561,10 @@
         {
           "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CognitiveLoadGraphView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/arm64-apple-macosx/debug/Flow.build/CompactFlipClockView.swift.o"
         },
         {
           "kind" : "file",

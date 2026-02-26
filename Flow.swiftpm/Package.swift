@@ -33,7 +33,8 @@ let package = Package(
                 "RecoveryView.swift",
                 "SessionSummaryView.swift",
                 "HistoryStripView.swift",
-                "MenuBarManager.swift"
+                "MenuBarManager.swift",
+                "CompactFlipClockView.swift"
             ]
         )
     ]
