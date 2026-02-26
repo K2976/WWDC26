@@ -185,20 +185,26 @@ struct DashboardView: View {
                     toggleMacOSFocus(engine.isFocusMode)
                 }
             } label: {
-                Image(systemName: engine.isFocusMode ? "moon.fill" : "moon")
-                    .font(.system(size: 16))
-                    .foregroundStyle(engine.isFocusMode ? .white.opacity(0.6) : .white.opacity(0.3))
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(engine.isFocusMode ?
-                                  .white.opacity(0.08) :
-                                  .white.opacity(0.03))
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(.white.opacity(engine.isFocusMode ? 0.1 : 0.05), lineWidth: 0.5)
-                    )
+                HStack(spacing: 6) {
+                    Image(systemName: "moon.fill")
+                        .font(.system(size: 12))
+                    Text("DND")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .tracking(0.6)
+                }
+                .foregroundStyle(engine.isFocusMode ? .white.opacity(0.8) : .white.opacity(0.25))
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(engine.isFocusMode ?
+                              .white.opacity(0.12) :
+                              .white.opacity(0.03))
+                )
+                .overlay(
+                    Capsule()
+                        .stroke(.white.opacity(0.06), lineWidth: 0.5)
+                )
             }
             .buttonStyle(.plain)
             .keyboardShortcut("f", modifiers: .command)
