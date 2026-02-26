@@ -31,7 +31,7 @@ final class CognitiveLoadEngine {
     private var normalDecayInterval: TimeInterval = 30.0
     private var sessionStartScore: Double = 20.0
     
-    var sessionStartTime: Date = Date()
+    var sessionStartTime: Date = DemoManager.sharedCurrentDate
     var scoreHistory: [Double] = []
     
     // MARK: - Init
@@ -48,7 +48,7 @@ final class CognitiveLoadEngine {
         
         let record = AttentionEventRecord(
             event: event,
-            timestamp: Date(),
+            timestamp: DemoManager.sharedCurrentDate,
             scoreAfter: score
         )
         events.append(record)
@@ -74,7 +74,7 @@ final class CognitiveLoadEngine {
         animatedScore = score
         state = CognitiveState.from(score: score)
         sessionStartScore = score
-        sessionStartTime = Date()
+        sessionStartTime = DemoManager.sharedCurrentDate
         takeSnapshot()
     }
     
@@ -94,7 +94,7 @@ final class CognitiveLoadEngine {
     }
     
     func markReset() {
-        resetTimestamps.append(Date())
+        resetTimestamps.append(DemoManager.sharedCurrentDate)
     }
     
     func resetSession() {
@@ -105,7 +105,7 @@ final class CognitiveLoadEngine {
         score = 20.0
         animatedScore = 20.0
         state = CognitiveState.from(score: score)
-        sessionStartTime = Date()
+        sessionStartTime = DemoManager.sharedCurrentDate
         sessionStartScore = score
         takeSnapshot()
     }
@@ -115,7 +115,7 @@ final class CognitiveLoadEngine {
         let peak = scoreHistory.max() ?? score
         return SessionRecord(
             startTime: sessionStartTime,
-            endTime: Date(),
+            endTime: DemoManager.sharedCurrentDate,
             startScore: sessionStartScore,
             endScore: score,
             averageScore: avg,
@@ -163,11 +163,11 @@ final class CognitiveLoadEngine {
     }
     
     private func takeSnapshot() {
-        let snapshot = LoadSnapshot(timestamp: Date(), score: score)
+        let snapshot = LoadSnapshot(timestamp: DemoManager.sharedCurrentDate, score: score)
         history.append(snapshot)
         
         // Keep last 20 minutes of data (120 snapshots at 10s intervals)
-        let cutoff = Date().addingTimeInterval(-20 * 60)
+        let cutoff = DemoManager.sharedCurrentDate.addingTimeInterval(-20 * 60)
         history = history.filter { $0.timestamp > cutoff }
     }
     

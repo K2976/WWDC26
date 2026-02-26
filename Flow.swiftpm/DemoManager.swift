@@ -22,4 +22,26 @@ final class DemoManager {
             self.isDemoMode = UserDefaults.standard.bool(forKey: "isDemoMode")
         }
     }
+    
+    // MARK: - Accelerated Time Simulation
+    
+    nonisolated(unsafe) private static let realStartTime = Date()
+    private static let speedMultiplier: Double = 120.0 // 1 real second = 2 demo minutes
+    
+    /// Returns the current time. If demo mode is active, time moves 120x faster.
+    var currentDate: Date {
+        Self.sharedCurrentDate
+    }
+    
+    /// Global accessor for non-View models like Engine to get the correct time
+    static var sharedCurrentDate: Date {
+        let isDemo = UserDefaults.standard.bool(forKey: "isDemoMode")
+        if isDemo {
+            let elapsedRealSeconds = Date().timeIntervalSince(realStartTime)
+            let elapsedVirtualSeconds = elapsedRealSeconds * speedMultiplier
+            return realStartTime.addingTimeInterval(elapsedVirtualSeconds)
+        } else {
+            return Date()
+        }
+    }
 }

@@ -88,7 +88,8 @@ struct DashboardView: View {
             }
         }
         .onReceive(clockTimer) { _ in
-            currentTime = Date()
+            // For 120x real-time speed, update the UI according to DemoManager
+            currentTime = demoManager.currentDate
         }
         .onChange(of: engine.score) { _, newScore in
             if newScore > 85 && !showRecovery && !engine.isFocusMode {

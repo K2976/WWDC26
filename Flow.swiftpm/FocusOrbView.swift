@@ -37,7 +37,6 @@ struct FocusOrbView: View {
             let maxBlur: CGFloat = size * 0.60
             let currentBlur: CGFloat = minBlur + (maxBlur - minBlur) * CGFloat(score / 100.0)
             
-            // TimelineView completely detaches the animation cycle from view-reloads, ensuring it NEVER stops
             TimelineView(.animation) { context in
                 DynamicPulseView(
                     date: context.date,
