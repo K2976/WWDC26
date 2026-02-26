@@ -16,7 +16,6 @@ struct DashboardView: View {
     @State private var currentTip = ScienceInsights.randomInsight()
     @State private var currentTime = Date()
     @State private var showDetails = false
-    @State private var isTypingMode = false
     
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -77,9 +76,6 @@ struct DashboardView: View {
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
-            // Hide main dashboard when typing mode is active
-            .opacity(isTypingMode ? 0 : 1)
-            .animation(.easeInOut(duration: 0.8), value: isTypingMode)
             
             // Recovery overlay
             if showRecovery {
@@ -89,17 +85,6 @@ struct DashboardView: View {
             // Session summary overlay
             if sessionManager.showingSummary, let session = sessionManager.lastSession {
                 SessionSummaryView(session: session)
-            }
-            
-            // Typing Test Mode
-            if isTypingMode {
-                TypingModeView {
-                    withAnimation(.easeInOut(duration: 0.8)) {
-                        isTypingMode = false
-                    }
-                }
-                .transition(.opacity)
-                .zIndex(2)
             }
         }
         .onReceive(clockTimer) { _ in
@@ -195,27 +180,6 @@ struct DashboardView: View {
                 Image(systemName: audio.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .font(.system(size: 16))
                     .foregroundStyle(audio.isMuted ? .white.opacity(0.15) : .white.opacity(0.35))
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(.white.opacity(0.03))
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
-                    )
-            }
-            .buttonStyle(.plain)
-            
-            // Typing Test Mode Button
-            Button {
-                withAnimation(.easeInOut(duration: 0.8)) {
-                    isTypingMode = true
-                }
-            } label: {
-                Image(systemName: "keyboard")
-                    .font(.system(size: 16))
-                    .foregroundStyle(.white.opacity(0.3))
                     .frame(width: 44, height: 44)
                     .background(
                         Circle()

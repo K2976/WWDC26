@@ -33,9 +33,7 @@ let package = Package(
                 "RecoveryView.swift",
                 "SessionSummaryView.swift",
                 "HistoryStripView.swift",
-                "MenuBarManager.swift",
-                "TypingEngine.swift",
-                "TypingModeView.swift"
+                "MenuBarManager.swift"
             ]
         )
     ]
