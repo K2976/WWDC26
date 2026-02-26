@@ -111,11 +111,11 @@ struct RecoveryView: View {
     
     private func startRecovery() {
         isRecovering = true
-        engine.triggerAcceleratedDecay(amount: max(engine.score - 20, 0), duration: 10)
+        engine.triggerAcceleratedDecay(amount: max(engine.score - 20, 0), duration: 2)
         
-        // Breathing animation over 10 seconds (5 cycles of 2 seconds)
+        // Breathing animation over 2 seconds (2 cycles of 2 seconds)
         let cycleDuration: Double = 2.0
-        let totalDuration: Double = 10.0
+        let totalDuration: Double = 2.0
         
         // Animate breathing
         func breathCycle() {
@@ -131,8 +131,8 @@ struct RecoveryView: View {
             }
         }
         
-        // Run 5 cycles
-        for i in 0..<5 {
+        // Run 2 cycles
+        for i in 0..<2 {
             DispatchQueue.main.asyncAfter(deadline: .now() + cycleDuration * Double(i)) {
                 breathCycle()
             }
@@ -143,7 +143,7 @@ struct RecoveryView: View {
             recoveryProgress = 1.0
         }
         
-        // Complete after 10 seconds — ensure score is at baseline
+        // Complete after 4 seconds — ensure score is at baseline
         DispatchQueue.main.asyncAfter(deadline: .now() + totalDuration) {
             engine.markReset()
             engine.setScore(20)
