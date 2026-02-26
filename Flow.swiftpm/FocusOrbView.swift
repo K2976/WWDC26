@@ -27,27 +27,27 @@ struct FocusOrbView: View {
 
     var body: some View {
         ZStack {
-            // Ambient glowing pulse behind the 3D globe
-            // The speed goes from 2.5s calm to a rapid 0.4s heartbeat when overloaded
-            let duration: Double = 2.5 - (score / 100.0) * 2.1 
-            // The physical scale gets slightly larger when stressed
-            let maxScale: CGFloat = 1.05 + CGFloat(score / 100.0) * 0.20 
+            let minDuration: Double = 0.25 // Extremely fast heartbeat at max
+            let duration: Double = max(2.5 - (score / 100.0) * 2.25, minDuration)
+            
+            let maxScale: CGFloat = 1.05 + CGFloat(score / 100.0) * 0.25
             let minScale: CGFloat = 0.9 - CGFloat(score / 100.0) * 0.05
             
-            // At higher scores, the glow spreads out much further into the background
             let minBlur: CGFloat = size * 0.20
-            let maxBlur: CGFloat = size * 0.50
+            let maxBlur: CGFloat = size * 0.60
             let currentBlur: CGFloat = minBlur + (maxBlur - minBlur) * CGFloat(score / 100.0)
             
-            PhaseAnimator([false, true]) { phase in
-                Circle()
-                    .fill(FlowColors.glowColor(for: score))
-                    .frame(width: size * 0.95, height: size * 0.95)
-                    .blur(radius: currentBlur)
-                    .scaleEffect(phase ? maxScale : minScale)
-                    .opacity(phase ? 0.9 : 0.4)
-            } animation: { _ in
-                .easeInOut(duration: max(duration, 0.4)) // Prevent duration from ever hitting 0 or negative
+            // TimelineView completely detaches the animation cycle from view-reloads, ensuring it NEVER stops
+            TimelineView(.animation) { context in
+                DynamicPulseView(
+                    date: context.date,
+                    duration: duration,
+                    score: score,
+                    size: size,
+                    minBlur: currentBlur,
+                    minScale: minScale,
+                    maxScale: maxScale
+                )
             }
             
             GlobeSceneView(score: score)
@@ -55,5 +55,49 @@ struct FocusOrbView: View {
                 .frame(width: size * 1.3, height: size * 1.3)
                 .padding(-size * 0.15)
         }
+    }
+}
+
+// MARK: - Dynamic Pulse View
+// Handles accumulated phase for a perfectly smooth sine wave, even when `duration` changes abruptly.
+struct DynamicPulseView: View {
+    let date: Date
+    let duration: Double
+    let score: Double
+    let size: CGFloat
+    let minBlur: CGFloat
+    let minScale: CGFloat
+    let maxScale: CGFloat
+    
+    @State private var accumulatedPhase: Double = 0
+    @State private var lastUpdate: Date = Date()
+    
+    var body: some View {
+        // Calculate the smooth 0-1 sine wave value based on accumulated phase
+        let value = (sin(accumulatedPhase) + 1) / 2
+        
+        Circle()
+            .fill(FlowColors.glowColor(for: score))
+            .frame(width: size * 0.95, height: size * 0.95)
+            .blur(radius: minBlur)
+            .scaleEffect(minScale + (maxScale - minScale) * value)
+            .opacity(0.4 + 0.55 * value)
+            .onChange(of: date) { _, newDate in
+                let dt = newDate.timeIntervalSince(lastUpdate)
+                lastUpdate = newDate
+                
+                // Add to phase based on current duration speed
+                // 2 * pi represents one full heartbeat cycle.
+                let phaseIncrement = (dt / duration) * .pi * 2
+                accumulatedPhase += phaseIncrement
+                
+                // Keep phase bounded to prevent precision loss over long sessions
+                if accumulatedPhase > .pi * 2000 {
+                    accumulatedPhase -= .pi * 2000
+                }
+            }
+            .onAppear {
+                lastUpdate = date
+            }
     }
 }
