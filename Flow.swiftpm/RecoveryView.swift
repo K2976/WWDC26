@@ -19,39 +19,62 @@ struct RecoveryView: View {
                         withAnimation { isPresented = false }
                     }
                 
-                // Pre-recovery message
+                // Reset warning message
                 VStack(spacing: 16) {
-                    Image(systemName: "wind")
+                    Image(systemName: "exclamationmark.triangle.fill")
                         .font(.system(size: 32))
-                        .foregroundStyle(.orange.opacity(0.7))
+                        .foregroundStyle(.orange.opacity(0.8))
                     
-                    Text("Your mind is overloaded")
+                    Text("Reset Attention Score?")
                         .font(FlowTypography.labelFont(size: 18))
                         .foregroundStyle(.white.opacity(0.8))
                     
-                    Text("Take a moment. Nothing is urgent enough to burn out for.")
+                    Text("Your current score of \(Int(engine.score)) will be reset to baseline.\nThis action cannot be undone.")
                         .font(FlowTypography.bodyFont(size: 14))
                         .foregroundStyle(.white.opacity(0.4))
                         .multilineTextAlignment(.center)
                     
-                    Button {
-                        startRecovery()
-                    } label: {
-                        Text("Reset Attention")
-                            .font(FlowTypography.labelFont(size: 15))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 28)
-                            .padding(.vertical, 12)
-                            .background(
-                                Capsule()
-                                    .fill(FlowColors.color(for: 30).opacity(0.5))
-                            )
-                            .overlay(
-                                Capsule()
-                                    .stroke(.white.opacity(0.15), lineWidth: 0.5)
-                            )
+                    HStack(spacing: 14) {
+                        // Cancel
+                        Button {
+                            withAnimation { isPresented = false }
+                        } label: {
+                            Text("Cancel")
+                                .font(FlowTypography.labelFont(size: 15))
+                                .foregroundStyle(.white.opacity(0.6))
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
+                                .background(
+                                    Capsule()
+                                        .fill(.white.opacity(0.08))
+                                )
+                                .overlay(
+                                    Capsule()
+                                        .stroke(.white.opacity(0.1), lineWidth: 0.5)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        
+                        // Confirm Reset
+                        Button {
+                            startRecovery()
+                        } label: {
+                            Text("Reset Attention")
+                                .font(FlowTypography.labelFont(size: 15))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 24)
+                                .padding(.vertical, 12)
+                                .background(
+                                    Capsule()
+                                        .fill(.orange.opacity(0.4))
+                                )
+                                .overlay(
+                                    Capsule()
+                                        .stroke(.orange.opacity(0.2), lineWidth: 0.5)
+                                )
+                        }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
                 .padding(40)
                 .background(
