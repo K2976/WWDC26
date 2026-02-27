@@ -81,6 +81,7 @@ struct DashboardView: View {
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
+            .animation(.easeInOut(duration: 0.4), value: showDetails)
             
             // Recovery overlay
             if showRecovery {
