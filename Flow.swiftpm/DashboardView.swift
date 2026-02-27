@@ -472,16 +472,16 @@ struct DashboardView: View {
                 Button {
                     currentTip = ScienceInsights.randomInsight()
                 } label: {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 8) {
                         Image(systemName: "brain.head.profile")
-                            .font(.system(size: 10))
+                            .font(.system(size: 14))
                         Text(currentTip)
-                            .font(FlowTypography.captionFont(size: 10))
-                            .lineLimit(2)
+                            .font(FlowTypography.bodyFont(size: 13))
+                            .lineLimit(3)
                             .multilineTextAlignment(.leading)
                     }
-                    .foregroundStyle(.white.opacity(0.2))
-                    .frame(maxWidth: 300, alignment: .leading)
+                    .foregroundStyle(.white.opacity(0.35))
+                    .frame(maxWidth: 400, alignment: .leading)
                     .padding(.horizontal, 24)
                 }
                 .buttonStyle(.plain)
