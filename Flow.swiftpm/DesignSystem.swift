@@ -56,16 +56,15 @@ struct FlowColors {
         let clamped = min(max(score, 0), 100)
         
         // Color stops: (score, hue, saturation, brightness)
-        // Deep blue → Indigo → Purple → Orange → Red
+        // Teal → Cyan → Green → Yellow → Orange → Red
         let stops: [(Double, Double, Double, Double)] = [
-            (0,   0.60, 0.80, 0.85),   // Deep blue
-            (25,  0.60, 0.75, 0.80),   // Blue
-            (40,  0.72, 0.65, 0.75),   // Indigo
-            (55,  0.80, 0.60, 0.75),   // Purple
-            (70,  0.80, 0.55, 0.70),   // Purple→Orange transition
-            (80,  0.08, 0.80, 0.90),   // Orange
-            (90,  0.02, 0.85, 0.90),   // Red-orange
-            (100, 0.98, 0.85, 0.80),   // Red
+            (0,   0.52, 0.75, 0.85),   // Teal
+            (20,  0.48, 0.70, 0.80),   // Cyan
+            (40,  0.35, 0.65, 0.75),   // Green
+            (55,  0.15, 0.75, 0.85),   // Yellow
+            (70,  0.08, 0.80, 0.90),   // Orange
+            (85,  0.02, 0.85, 0.85),   // Red-orange
+            (100, 0.00, 0.90, 0.75),   // Deep red
         ]
         
         // Find surrounding stops
@@ -105,13 +104,13 @@ struct FlowColors {
         let clamped = min(max(score, 0), 100)
         // Matches the orb color hues but very dark
         let stops: [(Double, Double, Double, Double)] = [
-            (0,   0.60, 0.30, 0.12),   // Deep blue tint
-            (30,  0.65, 0.30, 0.12),   // Indigo tint
-            (50,  0.72, 0.30, 0.12),   // Purple tint
-            (70,  0.80, 0.30, 0.13),   // Deep purple
-            (80,  0.08, 0.40, 0.14),   // Warm orange tint
+            (0,   0.52, 0.30, 0.12),   // Teal tint
+            (25,  0.48, 0.30, 0.12),   // Cyan tint
+            (45,  0.35, 0.30, 0.12),   // Green tint
+            (60,  0.15, 0.35, 0.13),   // Yellow tint
+            (75,  0.08, 0.40, 0.14),   // Orange tint
             (90,  0.02, 0.45, 0.14),   // Red-orange tint
-            (100, 0.98, 0.45, 0.13),   // Dark red tint
+            (100, 0.00, 0.45, 0.13),   // Dark red tint
         ]
         
         var lower = stops[0]
