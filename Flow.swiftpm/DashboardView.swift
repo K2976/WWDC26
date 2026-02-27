@@ -135,20 +135,27 @@ struct DashboardView: View {
             // Trailing: Session stopwatch in soft box
             HStack {
                 Spacer()
-                Text(sessionManager.formattedDuration)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundStyle(.white.opacity(0.5))
-                    .monospacedDigit()
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .fill(.white.opacity(0.06))
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12, style: .continuous)
-                            .stroke(.white.opacity(0.04), lineWidth: 0.5)
-                    )
+                VStack(spacing: 3) {
+                    Text("SESSION")
+                        .font(.system(size: 9, weight: .semibold, design: .rounded))
+                        .tracking(1.2)
+                        .foregroundStyle(.white.opacity(0.3))
+                    
+                    Text(sessionManager.formattedDuration)
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundStyle(.white.opacity(0.5))
+                        .monospacedDigit()
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(.white.opacity(0.06))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .stroke(.white.opacity(0.04), lineWidth: 0.5)
+                )
             }
         }
     }
