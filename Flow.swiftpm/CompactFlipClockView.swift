@@ -85,7 +85,7 @@ struct FlipDigit: View {
                     .opacity(flipPhase >= 0.5 ? 1 : 0) // Hide when before 90 degrees
             }
         }
-        .opacity(isFlipping ? 0.85 : 0.65) // Brief opacity bump during flip, default 65%
+        .opacity(isFlipping ? 0.75 : 0.55) // Brief opacity bump during flip, default 55%
         .onChange(of: value) { _, newValue in
             guard newValue != currentValue else { return }
             nextValue = newValue

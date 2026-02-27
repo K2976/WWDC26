@@ -26,39 +26,43 @@ struct DashboardView: View {
                 AmbientBackground()
                     .ignoresSafeArea()
                 
-                VStack(spacing: 0) {
-                    headerSection
-                        .padding(.horizontal, 24)
-                        .padding(.top, 16)
-                    
-                    GeometryReader { geo in
-                        let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
-                        VStack(spacing: 20) {
-                            FocusOrbView(score: engine.animatedScore, size: orbSize)
+                // Center: Orb + state labels
+                GeometryReader { geo in
+                    let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
+                    VStack(spacing: 20) {
+                        FocusOrbView(score: engine.animatedScore, size: orbSize)
+                        
+                        VStack(spacing: 8) {
+                            // State label
+                            Text(engine.state.label)
+                                .font(FlowTypography.labelFont(size: 22))
+                                .foregroundStyle(.white.opacity(0.4))
+                                .animation(.easeInOut(duration: 1.5), value: engine.state)
                             
-                            VStack(spacing: 8) {
-                                // State label
-                                Text(engine.state.label)
-                                    .font(FlowTypography.labelFont(size: 22))
-                                    .foregroundStyle(.white.opacity(0.4))
-                                    .animation(.easeInOut(duration: 1.5), value: engine.state)
-                                
-                                // Contextual line
-                                Text(engine.state.contextualLine)
-                                    .font(FlowTypography.bodyFont(size: 15))
-                                    .foregroundStyle(.white.opacity(0.25))
-                                    .transition(.opacity)
-                                    .animation(.easeInOut(duration: 1.5), value: engine.state)
-                            }
+                            // Contextual line
+                            Text(engine.state.contextualLine)
+                                .font(FlowTypography.bodyFont(size: 15))
+                                .foregroundStyle(.white.opacity(0.25))
+                                .transition(.opacity)
+                                .animation(.easeInOut(duration: 1.5), value: engine.state)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+                
+                // Edge-anchored controls overlay
+                VStack(spacing: 0) {
+                    // ── Top row ──
+                    topControls
+                        .padding(.horizontal, 28)
+                        .padding(.top, 20)
                     
                     Spacer()
                     
+                    // ── Bottom row ──
                     bottomControls
-                        .padding(.horizontal, 32)
-                        .padding(.bottom, 16)
+                        .padding(.horizontal, 28)
+                        .padding(.bottom, 20)
                 }
                 
                 // Slide-up detail panel with dismissible backdrop
@@ -88,7 +92,6 @@ struct DashboardView: View {
             }
         }
         .onReceive(clockTimer) { _ in
-            // For 120x real-time speed, update the UI according to DemoManager
             currentTime = demoManager.currentDate
         }
         .onChange(of: engine.score) { _, newScore in
@@ -102,138 +105,49 @@ struct DashboardView: View {
         }
     }
     
-    // MARK: - Header (Minimal, Transparent)
+    // MARK: - Top Controls
     
-    private var headerSection: some View {
+    private var topControls: some View {
         ZStack {
-            // Score Meter (Big, Centered)
+            // Center: Cognitive load number
             Text("\(Int(engine.animatedScore))")
                 .font(FlowTypography.headingFont(size: 64))
                 .foregroundStyle(.white.opacity(0.85))
                 .contentTransition(.numericText())
                 .animation(.spring(response: 0.3, dampingFraction: 0.7), value: Int(engine.animatedScore))
             
+            // Leading: Flip clock
             HStack {
                 CompactFlipClockView(date: currentTime)
-                
                 Spacer()
-                
-                // Demo Mode Toggle
-                Button {
-                withAnimation(FlowAnimation.viewTransition) {
-                    demoManager.isDemoMode.toggle()
-                    sessionManager.setDemoMode(demoManager.isDemoMode)
-                    
-                    if demoManager.isDemoMode {
-                        realDetector.stop()
-                        simulation.userHasInteracted = false
-                        simulation.startSimulation(engine: engine)
-                    } else {
-                        simulation.stopSimulation()
-                        realDetector.start(engine: engine)
-                    }
-                }
-            } label: {
-                Text("DEMO")
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .tracking(0.6)
-                    .foregroundStyle(demoManager.isDemoMode ? .white.opacity(0.6) : .white.opacity(0.25))
+            }
+            
+            // Trailing: Session stopwatch in soft box
+            HStack {
+                Spacer()
+                Text(sessionManager.formattedDuration)
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+                    .monospacedDigit()
                     .padding(.horizontal, 14)
                     .padding(.vertical, 8)
                     .background(
-                        Capsule()
-                            .fill(demoManager.isDemoMode ?
-                                  .white.opacity(0.08) :
-                                  .white.opacity(0.03))
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(.white.opacity(0.06))
                     )
                     .overlay(
-                        Capsule()
-                            .stroke(.white.opacity(0.06), lineWidth: 0.5)
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .stroke(.white.opacity(0.04), lineWidth: 0.5)
                     )
             }
-            .buttonStyle(.plain)
-            .focusable(false)
-            
-            // Mute Toggle
-            Button {
-                audio.isMuted.toggle()
-                if audio.isMuted {
-                    audio.stopAmbient()
-                } else {
-                    audio.startAmbient()
-                }
-            } label: {
-                Image(systemName: audio.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
-                    .font(.system(size: 16))
-                    .foregroundStyle(audio.isMuted ? .white.opacity(0.15) : .white.opacity(0.35))
-                    .frame(width: 44, height: 44)
-                    .background(
-                        Circle()
-                            .fill(.white.opacity(0.03))
-                    )
-                    .overlay(
-                        Circle()
-                            .stroke(.white.opacity(0.05), lineWidth: 0.5)
-                    )
-            }
-            .buttonStyle(.plain)
-            .focusable(false)
-            
-            // Focus Mode Toggle
-            Button {
-                withAnimation(FlowAnimation.viewTransition) {
-                    engine.isFocusMode.toggle()
-                    audio.setFocusMode(engine.isFocusMode)
-                    toggleMacOSFocus(engine.isFocusMode)
-                }
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "moon.fill")
-                        .font(.system(size: 12))
-                    Text("DND")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .tracking(0.6)
-                }
-                .foregroundStyle(engine.isFocusMode ? .white.opacity(0.8) : .white.opacity(0.25))
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(
-                    Capsule()
-                        .fill(engine.isFocusMode ?
-                              .white.opacity(0.12) :
-                              .white.opacity(0.03))
-                )
-                .overlay(
-                    Capsule()
-                        .stroke(.white.opacity(0.06), lineWidth: 0.5)
-                )
-            }
-            .buttonStyle(.plain)
-            .focusable(false)
-            .keyboardShortcut("f", modifiers: .command)
-        }
-        .padding(.horizontal, 24)
         }
     }
-    
-    // MARK: - Orb Section (Centered, Dominant)
-    
-    // This section is now integrated directly into the body's main VStack.
-    // The `orbSection` private var is no longer needed.
     
     // MARK: - Bottom Controls
     
     private var bottomControls: some View {
-        HStack {
-            // Session timer
-            Text(sessionManager.formattedDuration)
-                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                .foregroundStyle(.white.opacity(0.6))
-                .monospacedDigit()
-            
-            Spacer()
-            
-            // Details toggle
+        ZStack {
+            // Center: Details toggle chevron
             Button {
                 withAnimation(.easeInOut(duration: 0.4)) {
                     showDetails.toggle()
@@ -241,44 +155,182 @@ struct DashboardView: View {
             } label: {
                 Image(systemName: showDetails ? "chevron.down" : "chevron.up")
                     .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .foregroundStyle(.white.opacity(0.5))
                     .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(.white.opacity(0.08))
+                            .fill(.white.opacity(0.06))
                     )
                     .overlay(
                         Circle()
-                            .stroke(.white.opacity(0.06), lineWidth: 0.5)
+                            .stroke(.white.opacity(0.04), lineWidth: 0.5)
                     )
+                    .animation(.easeOut(duration: 0.25), value: showDetails)
             }
             .buttonStyle(.plain)
             .focusable(false)
             
-            Spacer()
-            
-            // End Session
-            Button {
-                sessionManager.endSession(engine: engine)
-                audio.playCompletionChime()
-                haptics.playCompletionHaptic()
-            } label: {
-                Text("End")
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .tracking(0.6)
-                    .foregroundStyle(.white.opacity(0.6))
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
-                    .background(
-                        Capsule().fill(.white.opacity(0.08))
-                    )
-                    .overlay(
-                        Capsule().stroke(.white.opacity(0.06), lineWidth: 0.5)
-                    )
+            // Leading: DND + Sound toggle
+            HStack {
+                HStack(spacing: 10) {
+                    // Focus Mode (DND) Toggle
+                    Button {
+                        withAnimation(FlowAnimation.viewTransition) {
+                            engine.isFocusMode.toggle()
+                            audio.setFocusMode(engine.isFocusMode)
+                            toggleMacOSFocus(engine.isFocusMode)
+                        }
+                    } label: {
+                        HStack(spacing: 6) {
+                            Image(systemName: "moon.fill")
+                                .font(.system(size: 12))
+                            Text("DND")
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .tracking(0.6)
+                        }
+                        .foregroundStyle(engine.isFocusMode ? .white.opacity(0.85) : .white.opacity(0.35))
+                        .frame(height: 20)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(.white.opacity(0.06))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(.white.opacity(0.04), lineWidth: 0.5)
+                        )
+                        .animation(.easeOut(duration: 0.25), value: engine.isFocusMode)
+                    }
+                    .buttonStyle(.plain)
+                    .focusable(false)
+                    .keyboardShortcut("f", modifiers: .command)
+                    
+                    // Sliding sound toggle
+                    soundToggle
+                        .frame(height: 20)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 8)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(.white.opacity(0.06))
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .stroke(.white.opacity(0.04), lineWidth: 0.5)
+                        )
+                }
+                Spacer()
             }
-            .buttonStyle(.plain)
-            .focusable(false)
+            
+            // Trailing: DEMO + END
+            HStack {
+                Spacer()
+                HStack(spacing: 10) {
+                    // Demo Mode Toggle
+                    Button {
+                        withAnimation(FlowAnimation.viewTransition) {
+                            demoManager.isDemoMode.toggle()
+                            sessionManager.setDemoMode(demoManager.isDemoMode)
+                            
+                            if demoManager.isDemoMode {
+                                realDetector.stop()
+                                simulation.userHasInteracted = false
+                                simulation.startSimulation(engine: engine)
+                            } else {
+                                simulation.stopSimulation()
+                                realDetector.start(engine: engine)
+                            }
+                        }
+                    } label: {
+                        Text("DEMO")
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .tracking(0.6)
+                            .foregroundStyle(demoManager.isDemoMode ? .white.opacity(0.7) : .white.opacity(0.35))
+                            .frame(height: 20)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .fill(.white.opacity(0.06))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .stroke(.white.opacity(0.04), lineWidth: 0.5)
+                            )
+                            .animation(.easeOut(duration: 0.25), value: demoManager.isDemoMode)
+                    }
+                    .buttonStyle(.plain)
+                    .focusable(false)
+                    
+                    // End Session
+                    Button {
+                        sessionManager.endSession(engine: engine)
+                        audio.playCompletionChime()
+                        haptics.playCompletionHaptic()
+                    } label: {
+                        Text("END")
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .tracking(0.6)
+                            .foregroundStyle(.white.opacity(0.5))
+                            .frame(height: 20)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .fill(.white.opacity(0.06))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .stroke(.white.opacity(0.04), lineWidth: 0.5)
+                            )
+                    }
+                    .buttonStyle(.plain)
+                    .focusable(false)
+                }
+            }
         }
+    }
+    
+    // MARK: - Sound Toggle
+    
+    private var soundToggle: some View {
+        Button {
+            withAnimation(.easeOut(duration: 0.25)) {
+                audio.isMuted.toggle()
+                if audio.isMuted {
+                    audio.stopAmbient()
+                } else {
+                    audio.startAmbient()
+                }
+            }
+        } label: {
+            ZStack {
+                // Sliding highlight behind active icon
+                HStack {
+                    if !audio.isMuted { Spacer() }
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(.white.opacity(0.10))
+                        .frame(width: 28, height: 20)
+                    if audio.isMuted { Spacer() }
+                }
+                
+                // Two icons side by side
+                HStack(spacing: 10) {
+                    Image(systemName: "speaker.slash.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(audio.isMuted ? 0.7 : 0.25))
+                    
+                    Image(systemName: "speaker.wave.2.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(audio.isMuted ? 0.25 : 0.7))
+                }
+            }
+            .frame(width: 56)
+            .animation(.easeOut(duration: 0.25), value: audio.isMuted)
+        }
+        .buttonStyle(.plain)
+        .focusable(false)
     }
     
     // MARK: - Detail Panel (Slides Up on Interaction)
@@ -391,11 +443,11 @@ struct DashboardView: View {
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.white.opacity(0.03))
+                    .fill(.white.opacity(0.05))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(.white.opacity(0.05), lineWidth: 0.5)
+                    .stroke(.white.opacity(0.03), lineWidth: 0.5)
             )
         }
         .buttonStyle(.plain)
