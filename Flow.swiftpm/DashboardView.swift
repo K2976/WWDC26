@@ -117,12 +117,17 @@ struct DashboardView: View {
     
     private var topControls: some View {
         ZStack {
-            // Center: Cognitive load number
-            Text("\(Int(engine.animatedScore))")
-                .font(FlowTypography.headingFont(size: 64))
-                .foregroundStyle(.white.opacity(0.85))
-                .contentTransition(.numericText())
-                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: Int(engine.animatedScore))
+            // Center: Cognitive load number + trend arrow
+            HStack(alignment: .center, spacing: 8) {
+                Text("\(Int(engine.animatedScore))")
+                    .font(FlowTypography.headingFont(size: 64))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.3, dampingFraction: 0.7), value: Int(engine.animatedScore))
+                
+                // Stock-style trend arrow
+                trendIndicator
+            }
             
             // Leading: Flip clock
             HStack {
@@ -156,6 +161,40 @@ struct DashboardView: View {
                 )
             }
         }
+    }
+    
+    // MARK: - Trend Indicator
+    
+    private var trendIndicator: some View {
+        let history = engine.scoreHistory
+        let trend: Double = {
+            guard history.count >= 3 else { return 0 }
+            let recent = Array(history.suffix(5))
+            let delta = recent.last! - recent.first!
+            return delta
+        }()
+        
+        let isUp = trend > 3
+        let isDown = trend < -3
+        // stable otherwise
+        
+        return VStack(spacing: 2) {
+            if isUp {
+                Image(systemName: "arrowtriangle.up.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.red.opacity(0.8))
+            } else if isDown {
+                Image(systemName: "arrowtriangle.down.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.green.opacity(0.8))
+            } else {
+                Image(systemName: "minus")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.yellow.opacity(0.6))
+            }
+        }
+        .animation(.easeInOut(duration: 0.3), value: isUp)
+        .animation(.easeInOut(duration: 0.3), value: isDown)
     }
     
     // MARK: - Bottom Controls
