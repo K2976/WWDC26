@@ -24,16 +24,16 @@ final class AudioManager {
     // MARK: - Setup
     
     private func setupAudio() {
-        // Calm tone: 180Hz carrier modulated at 32Hz beat rate (low gamma)
-        if let calmData = generateWAVData(carrier: 180, beatRate: 32, amplitude: 0.12) {
+        // Calm tone: 180Hz carrier modulated at 20Hz beat rate
+        if let calmData = generateWAVData(carrier: 180, beatRate: 20, amplitude: 0.12) {
             calmPlayer = try? AVAudioPlayer(data: calmData)
             calmPlayer?.numberOfLoops = -1
             calmPlayer?.volume = 0.6
             calmPlayer?.prepareToPlay()
         }
         
-        // Stress tone: 200Hz carrier modulated at 48Hz beat rate (high gamma)
-        if let stressData = generateWAVData(carrier: 200, beatRate: 48, amplitude: 0.10) {
+        // Stress tone: 200Hz carrier modulated at 40Hz beat rate
+        if let stressData = generateWAVData(carrier: 200, beatRate: 40, amplitude: 0.10) {
             stressPlayer = try? AVAudioPlayer(data: stressData)
             stressPlayer?.numberOfLoops = -1
             stressPlayer?.volume = 0.0

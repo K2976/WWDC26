@@ -11,49 +11,60 @@ struct OnboardingView: View {
     @State private var showOrbs = false
     @State private var selectedLevel: Int? = nil
     @State private var isTransitioning = false
+    @State private var showColdLoading = false
     
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             
-            VStack(spacing: 40) {
-                Spacer()
-                
-                // Orb — always alive
-                FocusOrbView(score: [10.0, 30, 50, 70, 90][(selectedLevel ?? 1) - 1], size: 200)
-                    .opacity(isTransitioning ? 0 : 1)
-                    .scaleEffect(isTransitioning ? 0.5 : 1.0)
-                
-                // Text
-                if showText {
-                    Text("Your attention has a shape.\nFlow shows it to you.")
-                        .font(FlowTypography.labelFont(size: 20))
-                        .foregroundStyle(.white.opacity(0.8))
-                        .multilineTextAlignment(.center)
-                        .transition(.opacity)
-                }
-                
-                // Prompt
-                if showPrompt {
-                    VStack(spacing: 24) {
-                        Text("How focused are you right now?")
-                            .font(FlowTypography.bodyFont(size: 16))
-                            .foregroundStyle(.white.opacity(0.6))
-                        
-                        // 5 glowing orb fragments
-                        HStack(spacing: 20) {
-                            ForEach(1...5, id: \.self) { level in
-                                orbFragment(level: level)
+            if !showColdLoading {
+                VStack(spacing: 40) {
+                    Spacer()
+                    
+                    // Orb — always alive
+                    FocusOrbView(score: [10.0, 30, 50, 70, 90][(selectedLevel ?? 1) - 1], size: 200)
+                    
+                    // Text
+                    if showText {
+                        Text("Your attention has a shape.\nFlow shows it to you.")
+                            .font(FlowTypography.labelFont(size: 20))
+                            .foregroundStyle(.white.opacity(0.8))
+                            .multilineTextAlignment(.center)
+                            .transition(.opacity)
+                    }
+                    
+                    // Prompt
+                    if showPrompt {
+                        VStack(spacing: 24) {
+                            Text("How focused are you right now?")
+                                .font(FlowTypography.bodyFont(size: 16))
+                                .foregroundStyle(.white.opacity(0.6))
+                            
+                            // 5 glowing orb fragments
+                            HStack(spacing: 20) {
+                                ForEach(1...5, id: \.self) { level in
+                                    orbFragment(level: level)
+                                }
                             }
                         }
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
                     }
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    
+                    Spacer()
                 }
-                
-                Spacer()
+                .padding(40)
+                .transition(.opacity)
             }
-            .padding(40)
+            
+            // Cinematic loading overlay
+            if showColdLoading {
+                ColdLoadingView(isPresented: $showColdLoading)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+                    .zIndex(100)
+            }
         }
+        .animation(.easeOut(duration: 0.4), value: showColdLoading)
         .onAppear {
             // Staggered reveal — interaction available within 5 seconds
             withAnimation(.easeIn(duration: 1.0)) {
@@ -82,13 +93,14 @@ struct OnboardingView: View {
                 selectedLevel = level
             }
             
-            // Set initial score and transition
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-                engine.setInitialScore(score)
-                withAnimation(.easeInOut(duration: 0.5)) {
-                    isTransitioning = true
+            // Set initial score and show loading screen
+            engine.setInitialScore(score)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeOut(duration: 0.3)) {
+                    showColdLoading = true
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                // Transition to main app after loading
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                     hasOnboarded = true
                 }
             }
