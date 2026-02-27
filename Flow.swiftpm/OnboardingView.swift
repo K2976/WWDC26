@@ -20,7 +20,7 @@ struct OnboardingView: View {
                 Spacer()
                 
                 // Orb — always alive
-                FocusOrbView(score: Double(selectedLevel ?? 2) * 15, size: 200)
+                FocusOrbView(score: [10.0, 30, 50, 70, 90][(selectedLevel ?? 1) - 1], size: 200)
                     .opacity(isTransitioning ? 0 : 1)
                     .scaleEffect(isTransitioning ? 0.5 : 1.0)
                 
@@ -71,7 +71,10 @@ struct OnboardingView: View {
     @ViewBuilder
     private func orbFragment(level: Int) -> some View {
         let isSelected = selectedLevel == level
-        let score = Double(level) * 18.0 // 18, 36, 54, 72, 90
+        let levelLabels = ["Calm", "Relaxed", "Moderate", "Elevated", "Overloaded"]
+        let levelScores: [Double] = [10, 30, 50, 70, 90]
+        let score = levelScores[level - 1]
+        let label = levelLabels[level - 1]
         let color = FlowColors.color(for: score)
         
         Button {
@@ -107,8 +110,8 @@ struct OnboardingView: View {
                             .stroke(Color.white.opacity(isSelected ? 0.4 : 0), lineWidth: 2)
                     )
                 
-                Text("\(level)")
-                    .font(FlowTypography.captionFont(size: 13))
+                Text(label)
+                    .font(FlowTypography.captionFont(size: 10))
                     .foregroundStyle(.white.opacity(isSelected ? 0.9 : 0.4))
             }
         }
