@@ -276,7 +276,7 @@ enum GuideID: String, CaseIterable {
 }
 
 struct GuideFrameKey: PreferenceKey {
-    static var defaultValue: [GuideID: Anchor<CGRect>] = [:]
+    nonisolated(unsafe) static var defaultValue: [GuideID: Anchor<CGRect>] = [:]
     static func reduce(value: inout [GuideID: Anchor<CGRect>], nextValue: () -> [GuideID: Anchor<CGRect>]) {
         value.merge(nextValue(), uniquingKeysWith: { $1 })
     }
