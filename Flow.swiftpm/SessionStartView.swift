@@ -4,6 +4,7 @@ import SwiftUI
 
 struct SessionStartView: View {
     @Environment(CognitiveLoadEngine.self) private var engine
+    @Environment(SessionManager.self) private var sessionManager
     @Environment(\.flowScale) private var s
     @Binding var isPresented: Bool
     
@@ -90,8 +91,9 @@ struct SessionStartView: View {
                 selectedLevel = level
             }
             
-            // Set the initial score for the new session
+            // Set the initial score and start the session timer
             engine.setInitialScore(score)
+            sessionManager.beginSession()
             
             // Show loading, then dismiss
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

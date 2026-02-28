@@ -9,6 +9,7 @@ final class SessionManager {
     
     private(set) var isSessionActive: Bool = true
     private(set) var sessionStartTime: Date = Date()
+    private(set) var hasPickedScore: Bool = false
     private(set) var completedSessions: [SessionRecord] = []
     private(set) var savedSessions: [SessionRecord] = []
     private(set) var showingSummary: Bool = false
@@ -38,6 +39,7 @@ final class SessionManager {
     func startNewSession(engine: CognitiveLoadEngine) {
         sessionStartTime = Date()
         isSessionActive = true
+        hasPickedScore = false
         showingSummary = false
         engine.resetSession()
     }
@@ -76,13 +78,19 @@ final class SessionManager {
     }
     
     var sessionDuration: TimeInterval {
-        Date().timeIntervalSince(sessionStartTime)
+        guard hasPickedScore else { return 0 }
+        return Date().timeIntervalSince(sessionStartTime)
     }
     
     var formattedDuration: String {
         let minutes = Int(sessionDuration) / 60
         let seconds = Int(sessionDuration) % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+    
+    func beginSession() {
+        sessionStartTime = Date()
+        hasPickedScore = true
     }
     
     // MARK: - Mock History
