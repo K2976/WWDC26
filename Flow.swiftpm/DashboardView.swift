@@ -21,7 +21,6 @@ struct DashboardView: View {
     @State private var showDNDLoading = false
     
     @AppStorage("hasSeenGuide") var hasSeenGuide: Bool = false
-    @AppStorage("hasSeenHeadphonePrompt") private var hasSeenHeadphonePrompt: Bool = false
     @State var showGuide: Bool = false
     @State private var showHeadphonePrompt: Bool = false
     
@@ -138,7 +137,7 @@ struct DashboardView: View {
                         Spacer()
                         
                         Button {
-                            withAnimation(.easeOut(duration: 0.3)) {
+                            withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
                                 showHeadphonePrompt = false
                             }
                         } label: {
@@ -578,16 +577,13 @@ struct DashboardView: View {
                     audio.stopAmbient()
                 } else {
                     audio.startAmbient()
-                    // Show headphone prompt on first unmute
-                    if !hasSeenHeadphonePrompt {
-                        hasSeenHeadphonePrompt = true
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
-                            showHeadphonePrompt = true
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
-                            withAnimation(.easeOut(duration: 0.4)) {
-                                showHeadphonePrompt = false
-                            }
+                    // Show headphone prompt every unmute
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                        showHeadphonePrompt = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                        withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
+                            showHeadphonePrompt = false
                         }
                     }
                 }
