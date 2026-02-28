@@ -32,7 +32,7 @@ struct HistoryStripView: View {
     private func daySquare(_ day: DaySummary) -> some View {
         let isSelected = selectedDay?.id == day.id
         let hasData = day.eventCount > 0 || day.averageScore > 0
-        let color = hasData ? FlowColors.color(for: day.averageScore) : Color.white
+        let color = hasData ? FlowColors.pastelColor(for: day.averageScore) : Color.white
         
         return Button {
             guard hasData else { return }
@@ -40,25 +40,33 @@ struct HistoryStripView: View {
                 selectedDay = selectedDay?.id == day.id ? nil : day
             }
         } label: {
-            VStack(spacing: 4) {
-                RoundedRectangle(cornerRadius: 8)
+            VStack(spacing: 5) {
+                RoundedRectangle(cornerRadius: 10)
                     .fill(hasData
-                          ? color.opacity(isSelected ? 0.8 : 0.5)
-                          : Color.white.opacity(0.04))
-                    .frame(height: 36)
+                          ? color.opacity(isSelected ? 1.0 : 0.85)
+                          : Color.white.opacity(0.06))
+                    .frame(height: 44)
                     .frame(maxWidth: .infinity)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(.white.opacity(hasData
-                                                   ? (isSelected ? 0.3 : 0.08)
-                                                   : 0.06),
-                                    lineWidth: isSelected ? 1.5 : 0.5)
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(
+                                LinearGradient(
+                                    colors: [.white.opacity(0.25), .clear],
+                                    startPoint: .top,
+                                    endPoint: .center
+                                )
+                            )
+                            .opacity(hasData ? 1 : 0)
                     )
-                    .shadow(color: isSelected && hasData ? color.opacity(0.3) : .clear, radius: 6)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.white.opacity(isSelected ? 0.5 : 0.15), lineWidth: isSelected ? 1.5 : 1.0)
+                    )
+                    .shadow(color: .clear, radius: 0)
                 
                 Text(dayLabel(day.date))
-                    .font(FlowTypography.captionFont(size: 9))
-                    .foregroundStyle(.white.opacity(hasData ? (isSelected ? 0.6 : 0.3) : 0.2))
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white.opacity(hasData ? (isSelected ? 0.9 : 0.6) : 0.2))
             }
         }
         .buttonStyle(.plain)

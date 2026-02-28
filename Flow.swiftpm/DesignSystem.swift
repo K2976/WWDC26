@@ -92,6 +92,37 @@ struct FlowColors {
         return Color(hue: h, saturation: s, brightness: b)
     }
     
+    /// Pastel color — lower saturation, high brightness for vibrant fill
+    static func pastelColor(for score: Double) -> Color {
+        let clamped = min(max(score, 0), 100)
+        // Pastel stops: lower saturation, higher brightness than base
+        let stops: [(Double, Double, Double, Double)] = [
+            (0,   0.52, 0.45, 0.82),   // Soft teal
+            (20,  0.48, 0.42, 0.82),   // Soft cyan
+            (40,  0.35, 0.42, 0.80),   // Soft green
+            (55,  0.15, 0.50, 0.88),   // Soft yellow
+            (70,  0.08, 0.55, 0.92),   // Soft orange
+            (85,  0.02, 0.55, 0.88),   // Soft red-orange
+            (100, 0.00, 0.60, 0.82),   // Soft red
+        ]
+        var lower = stops[0]
+        var upper = stops[stops.count - 1]
+        for i in 0..<stops.count - 1 {
+            if clamped >= stops[i].0 && clamped <= stops[i + 1].0 {
+                lower = stops[i]
+                upper = stops[i + 1]
+                break
+            }
+        }
+        let range = upper.0 - lower.0
+        let t = range > 0 ? (clamped - lower.0) / range : 0
+        let smoothT = t * t * (3 - 2 * t)
+        let h = lower.1 + (upper.1 - lower.1) * smoothT
+        let s = lower.2 + (upper.2 - lower.2) * smoothT
+        let b = lower.3 + (upper.3 - lower.3) * smoothT
+        return Color(hue: h, saturation: s, brightness: b)
+    }
+    
     /// Glow color — brighter, more saturated version
     static func glowColor(for score: Double) -> Color {
         let clamped = min(max(score, 0), 100)

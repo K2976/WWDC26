@@ -116,7 +116,14 @@ struct DashboardView: View {
     // MARK: - Top Controls
     
     private var topControls: some View {
-        ZStack {
+        HStack(alignment: .center) {
+            // Leading: Flip clock
+            HStack {
+                CompactFlipClockView(date: currentTime)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            
             // Center: Cognitive load number + trend arrow
             HStack(alignment: .center, spacing: 8) {
                 Text("\(Int(engine.animatedScore))")
@@ -128,29 +135,24 @@ struct DashboardView: View {
                 // Stock-style trend arrow
                 trendIndicator
             }
-            
-            // Leading: Flip clock
-            HStack {
-                CompactFlipClockView(date: currentTime)
-                Spacer()
-            }
+            .frame(maxWidth: .infinity, alignment: .center)
             
             // Trailing: Session stopwatch in soft box
             HStack {
                 Spacer()
-                VStack(spacing: 3) {
+                VStack(spacing: 4) {
                     Text("SESSION")
-                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .font(.system(size: 11, weight: .bold, design: .rounded))
                         .tracking(1.2)
                         .foregroundStyle(.white.opacity(0.8))
                     
                     Text(sessionManager.formattedDuration)
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
                         .foregroundStyle(.white.opacity(0.8))
                         .monospacedDigit()
                 }
                 .padding(.horizontal, 14)
-                .padding(.vertical, 8)
+                .padding(.vertical, 10)
                 .background(
                     RoundedRectangle(cornerRadius: 12, style: .continuous)
                         .fill(.white.opacity(0.1))
@@ -160,6 +162,7 @@ struct DashboardView: View {
                         .stroke(.white.opacity(0.04), lineWidth: 0.5)
                 )
             }
+            .frame(maxWidth: .infinity)
         }
     }
     
@@ -524,25 +527,25 @@ struct DashboardView: View {
         } label: {
             VStack(spacing: 4) {
                 Image(systemName: event.symbol)
-                    .font(.system(size: 14))
+                    .font(.system(size: 16))
                 
                 Text(event.rawValue)
-                    .font(FlowTypography.captionFont(size: 10))
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
                 
                 Text("+\(Int(event.loadIncrease))")
                     .font(FlowTypography.captionFont(size: 9))
-                    .foregroundStyle(.white.opacity(0.15))
+                    .foregroundStyle(.white.opacity(0.4))
             }
-            .foregroundStyle(.white.opacity(0.4))
+            .foregroundStyle(.white.opacity(0.85))
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
+            .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.white.opacity(0.05))
+                    .fill(.white.opacity(0.12))
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(.white.opacity(0.03), lineWidth: 0.5)
+                    .stroke(.white.opacity(0.08), lineWidth: 0.5)
             )
         }
         .buttonStyle(.plain)

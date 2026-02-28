@@ -25,10 +25,10 @@ struct CompactFlipClockView: View {
             }
             
             Text(":")
-                .font(.system(size: 32, weight: .bold, design: .monospaced))
+                .font(.system(size: 40, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
-                .opacity(0.45) // Static colon slightly dimmer
-                .offset(y: -3)
+                .opacity(0.45)
+                .offset(y: -2)
             
             // Minutes
             HStack(spacing: 4) {
@@ -110,17 +110,16 @@ struct HalfDigit: View {
     let value: Int
     let isTop: Bool
     
-    // Significantly larger sizes to almost match the score size of 64
-    let width: CGFloat = 32
-    let fullHeight: CGFloat = 50
-    let halfHeight: CGFloat = 25
+    let width: CGFloat = 38
+    let fullHeight: CGFloat = 68
+    let halfHeight: CGFloat = 34
     
     var body: some View {
         ZStack {
             Color(white: 0.08).opacity(0.8) // Transparent near-black background
             
             Text("\(value)")
-                .font(.system(size: 38, weight: .bold, design: .monospaced))
+                .font(.system(size: 46, weight: .bold, design: .monospaced))
                 .foregroundColor(.white)
                 .frame(width: width, height: fullHeight)
                 .offset(y: isTop ? halfHeight/2 : -halfHeight/2)
