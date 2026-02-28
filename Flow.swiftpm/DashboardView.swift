@@ -23,6 +23,7 @@ struct DashboardView: View {
     @AppStorage("hasSeenGuide") var hasSeenGuide: Bool = false
     @State var showGuide: Bool = false
     @State private var showHeadphonePrompt: Bool = false
+    @State private var showDNDPrompt: Bool = false
     
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -113,6 +114,57 @@ struct DashboardView: View {
                     .ignoresSafeArea()
                     .transition(.opacity)
                     .zIndex(200)
+            }
+            
+            // DND prompt toast
+            if showDNDPrompt {
+                VStack {
+                    Spacer()
+                    HStack(spacing: 10 * s) {
+                        Image(systemName: "moon.fill")
+                            .font(.system(size: 20 * s, weight: .medium))
+                            .foregroundColor(.white.opacity(0.9))
+                        
+                        VStack(alignment: .leading, spacing: 3 * s) {
+                            Text("Do Not Disturb")
+                                .font(.system(size: 13 * s, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.9))
+                            Text(engine.isFocusMode ? "Your cognitive load score now decays much faster — deep focus accelerated." : "Score decay returned to normal — notifications resumed.")
+                                .font(.system(size: 11 * s, weight: .regular, design: .rounded))
+                                .foregroundColor(.white.opacity(0.5))
+                                .lineLimit(2)
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
+                                showDNDPrompt = false
+                            }
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 10 * s, weight: .bold))
+                                .foregroundColor(.white.opacity(0.4))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal, 16 * s)
+                    .padding(.vertical, 12 * s)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .environment(\.colorScheme, .dark)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
+                            .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                    )
+                    .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
+                    .padding(.horizontal, 40 * s)
+                    .padding(.bottom, 90 * s)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(250)
             }
             
             // Headphone prompt toast
@@ -374,6 +426,15 @@ struct DashboardView: View {
                             }
                             withAnimation(.easeOut(duration: 0.5)) {
                                 showDNDLoading = false
+                            }
+                            // Show DND prompt toast
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                                showDNDPrompt = true
+                            }
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                                withAnimation(.spring(response: 0.45, dampingFraction: 0.8)) {
+                                    showDNDPrompt = false
+                                }
                             }
                         }
                     } label: {
