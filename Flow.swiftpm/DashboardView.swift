@@ -13,6 +13,7 @@ struct DashboardView: View {
     let haptics: HapticsManager
     
     @State private var showRecovery = false
+    @State private var showSessionStart = false
     @State private var currentTip = ScienceInsights.randomInsight()
     @State private var currentTime = Date()
     @State private var showDetails = false
@@ -88,6 +89,13 @@ struct DashboardView: View {
                 RecoveryView(isPresented: $showRecovery)
             }
             
+            // Session start attention level picker
+            if showSessionStart {
+                SessionStartView(isPresented: $showSessionStart)
+                    .transition(.opacity)
+                    .zIndex(150)
+            }
+            
             // Session summary overlay
             if sessionManager.showingSummary, let session = sessionManager.lastSession {
                 SessionSummaryView(session: session)
@@ -102,6 +110,17 @@ struct DashboardView: View {
             }
         }
         .animation(.easeOut(duration: 0.3), value: showDNDLoading)
+        .animation(.easeOut(duration: 0.3), value: showSessionStart)
+        .onChange(of: showRecovery) { oldValue, newValue in
+            if oldValue == true && newValue == false {
+                // Recovery just finished — ask attention level
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    withAnimation {
+                        showSessionStart = true
+                    }
+                }
+            }
+        }
         .onReceive(clockTimer) { _ in
             currentTime = demoManager.currentDate
         }
@@ -354,6 +373,12 @@ struct DashboardView: View {
                             }
                             withAnimation(.easeOut(duration: 0.5)) {
                                 showDNDLoading = false
+                            }
+                            // Show attention level picker for new session
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                withAnimation {
+                                    showSessionStart = true
+                                }
                             }
                         }
                     } label: {

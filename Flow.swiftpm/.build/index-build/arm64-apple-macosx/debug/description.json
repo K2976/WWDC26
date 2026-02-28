@@ -112,6 +112,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionStartView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift"
         },
         {
@@ -153,6 +157,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/RecoveryView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/ScienceInsights.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionManager.swift.o",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SimulationManager.swift.o"
       ],
@@ -236,6 +241,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionStartView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift"
       ],
@@ -276,6 +282,7 @@
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/RecoveryView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/ScienceInsights.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift",
+      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionStartView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SimulationManager.swift",
       "-I",
@@ -442,6 +449,10 @@
         {
           "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionManager.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionStartView.swift"
         },
         {
           "kind" : "file",

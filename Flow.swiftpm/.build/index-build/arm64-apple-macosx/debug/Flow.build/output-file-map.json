@@ -156,6 +156,13 @@
     "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionManager.swiftdeps",
     "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionManager.dia"
   },
+  "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionStartView.swift": {
+    "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView.d",
+    "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView.swift.o",
+    "swiftmodule": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView~partial.swiftmodule",
+    "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView.swiftdeps",
+    "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionStartView.dia"
+  },
   "/Users/kartik/Documents/WWDC26/Flow.swiftpm/SessionSummaryView.swift": {
     "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.d",
     "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/SessionSummaryView.swift.o",
