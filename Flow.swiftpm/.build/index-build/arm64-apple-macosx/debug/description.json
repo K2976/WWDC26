@@ -76,6 +76,10 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GuideOverlayView.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift"
         },
         {
@@ -148,6 +152,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/FocusModeView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/FocusOrbView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GlobeView.swift.o",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/HistoryStripView.swift.o",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/MenuBarManager.swift.o",
@@ -232,6 +237,7 @@
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GlobeView.swift",
+        "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GuideOverlayView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift",
         "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift",
@@ -273,6 +279,7 @@
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusModeView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/FocusOrbView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GlobeView.swift",
+      "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GuideOverlayView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HistoryStripView.swift",
       "/Users/kartik/Documents/WWDC26/Flow.swiftpm/MenuBarManager.swift",
@@ -413,6 +420,10 @@
         {
           "kind" : "file",
           "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GlobeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GuideOverlayView.swift"
         },
         {
           "kind" : "file",

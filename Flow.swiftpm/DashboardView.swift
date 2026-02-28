@@ -20,6 +20,9 @@ struct DashboardView: View {
     @State private var showDetails = false
     @State private var showDNDLoading = false
     
+    @AppStorage("hasSeenGuide") var hasSeenGuide: Bool = false
+    @State var showGuide: Bool = false
+    
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
@@ -109,6 +112,23 @@ struct DashboardView: View {
                     .transition(.opacity)
                     .zIndex(200)
             }
+            
+            // Guide Overlay
+            if showGuide {
+                GuideOverlayView(
+                    engine: engine,
+                    demoManager: demoManager,
+                    s: s,
+                    dismiss: {
+                        withAnimation(.easeOut(duration: 0.25)) {
+                            showGuide = false
+                            hasSeenGuide = true
+                        }
+                    }
+                )
+                .transition(.opacity)
+                .zIndex(175)
+            }
         }
         .animation(.easeOut(duration: 0.3), value: showDNDLoading)
         .animation(.easeOut(duration: 0.3), value: showSessionStart)
@@ -140,6 +160,18 @@ struct DashboardView: View {
         }
         .onAppear {
             audio.startAmbient()
+            
+            // Auto open guide on first launch
+            if !hasSeenGuide {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.1) {
+                    // Only open if the user hasn't opened it themselves or navigated to focus mode
+                    if !hasSeenGuide && !showGuide {
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                            showGuide = true
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -342,6 +374,29 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
+                    
+                    // Help button (Coach Mark Guide)
+                    if !showRecovery && !sessionManager.showingSummary && !showSessionStart && !showDNDLoading {
+                        Button {
+                            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+                                showGuide = true
+                            }
+                        } label: {
+                            Circle()
+                                .fill(.ultraThinMaterial)
+                                .environment(\.colorScheme, .dark)
+                                .overlay(Circle().stroke(Color.white.opacity(0.1), lineWidth: 0.5))
+                                .frame(width: 36 * s, height: 36 * s)
+                                .overlay(
+                                    Image(systemName: "questionmark")
+                                        .font(.system(size: 14 * s, weight: .medium, design: .rounded))
+                                        .foregroundColor(.white.opacity(0.7))
+                                )
+                                .accessibilityLabel("Show app guide")
+                        }
+                        .buttonStyle(.plain)
+                        .focusable(false)
+                    }
                 
                 Spacer()
             }

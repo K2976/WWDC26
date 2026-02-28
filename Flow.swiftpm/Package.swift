@@ -36,7 +36,8 @@ let package = Package(
                 "MenuBarManager.swift",
                 "CompactFlipClockView.swift",
                 "ColdLoadingView.swift",
-                "SessionStartView.swift"
+                "SessionStartView.swift",
+                "GuideOverlayView.swift"
             ]
         )
     ]

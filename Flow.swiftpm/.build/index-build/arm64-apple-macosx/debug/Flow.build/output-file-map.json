@@ -93,6 +93,13 @@
     "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GlobeView.swiftdeps",
     "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GlobeView.dia"
   },
+  "/Users/kartik/Documents/WWDC26/Flow.swiftpm/GuideOverlayView.swift": {
+    "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView.d",
+    "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView.swift.o",
+    "swiftmodule": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView~partial.swiftmodule",
+    "swift-dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView.swiftdeps",
+    "diagnostics": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/GuideOverlayView.dia"
+  },
   "/Users/kartik/Documents/WWDC26/Flow.swiftpm/HapticsManager.swift": {
     "dependencies": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/HapticsManager.d",
     "object": "/Users/kartik/Documents/WWDC26/Flow.swiftpm/.build/index-build/arm64-apple-macosx/debug/Flow.build/HapticsManager.swift.o",
