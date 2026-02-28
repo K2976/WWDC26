@@ -75,7 +75,7 @@ final class CognitiveLoadEngine {
         state = CognitiveState.from(score: score)
         sessionStartScore = score
         sessionStartTime = DemoManager.sharedCurrentDate
-        takeSnapshot()
+        seedInitialHistory()
     }
     
     func triggerAcceleratedDecay(amount: Double = 20, duration: TimeInterval = 10) {
@@ -107,7 +107,7 @@ final class CognitiveLoadEngine {
         state = CognitiveState.from(score: score)
         sessionStartTime = DemoManager.sharedCurrentDate
         sessionStartScore = score
-        takeSnapshot()
+        seedInitialHistory()
     }
     
     func buildSessionRecord() -> SessionRecord {
@@ -162,6 +162,16 @@ final class CognitiveLoadEngine {
     private func decay() {
         let amount = isFocusMode ? decayAmount * focusDecayMultiplier : decayAmount
         setScore(score - amount)
+    }
+    
+    /// Seed at least 2 data points so Charts can draw a line immediately
+    private func seedInitialHistory() {
+        let now = DemoManager.sharedCurrentDate
+        // Two points slightly apart so LineMark renders on first frame
+        if history.isEmpty {
+            history.append(LoadSnapshot(timestamp: now.addingTimeInterval(-1), score: score))
+        }
+        history.append(LoadSnapshot(timestamp: now, score: score))
     }
     
     private func takeSnapshot() {

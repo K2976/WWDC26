@@ -7,11 +7,12 @@ struct CognitiveLoadGraphView: View {
     @Environment(CognitiveLoadEngine.self) private var engine
     @Environment(\.flowScale) private var s
     
-    // Throttled data — only updates every 2 seconds instead of on every event
+    // Throttled data — updates every second
     @State private var displayHistory: [LoadSnapshot] = []
     @State private var displayEvents: [AttentionEventRecord] = []
     @State private var displayResets: [Date] = []
     @State private var updateTimer: Timer?
+    @State private var graphReady = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8 * s) {
@@ -91,6 +92,7 @@ struct CognitiveLoadGraphView: View {
                 }
             }
             .chartYScale(domain: 0...100)
+            .chartXScale(domain: xDomain)
             .chartYAxis {
                 AxisMarks(values: [0, 25, 50, 75, 100]) { value in
                     AxisValueLabel {
@@ -119,16 +121,27 @@ struct CognitiveLoadGraphView: View {
                     .border(.white.opacity(0.05), width: 0.5)
             }
             .frame(height: 140 * s)
-            .drawingGroup()
+            .opacity(graphReady ? 1 : 0)
+            .animation(.easeIn(duration: 0.4), value: graphReady)
         }
         .onAppear { startThrottledUpdates() }
         .onDisappear { updateTimer?.invalidate() }
     }
     
-    // Only refresh chart data every 2 seconds to prevent lag from rapid button presses
+    // X-axis domain — always shows at least a 60-second window so the chart never collapses
+    private var xDomain: ClosedRange<Date> {
+        let now = DemoManager.sharedCurrentDate
+        if let earliest = displayHistory.first?.timestamp {
+            let start = min(earliest, now.addingTimeInterval(-60))
+            return start...now
+        }
+        return now.addingTimeInterval(-60)...now
+    }
+    
+    // Refresh chart data every second; mark ready once data exists
     private func startThrottledUpdates() {
         refreshDisplayData()
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { _ in
+        updateTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             Task { @MainActor in
                 refreshDisplayData()
             }
@@ -139,5 +152,8 @@ struct CognitiveLoadGraphView: View {
         displayHistory = Array(engine.history.suffix(80))
         displayEvents = Array(engine.events.suffix(15))
         displayResets = engine.resetTimestamps
+        if !displayHistory.isEmpty && !graphReady {
+            graphReady = true
+        }
     }
 }
