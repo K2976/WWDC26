@@ -1,36 +1,12 @@
 import SwiftUI
 
-// MARK: - Reverse Mask (transparent cutout in overlay)
-
-private extension View {
-    @ViewBuilder
-    func reverseMask<Mask: View>(@ViewBuilder _ mask: () -> Mask) -> some View {
-        self.mask {
-            Rectangle()
-                .overlay {
-                    mask()
-                        .blendMode(.destinationOut)
-                }
-                .compositingGroup()
-        }
-    }
-}
-
-// MARK: - Highlight Specification
-
-private struct HighlightSpec {
-    let center: CGPoint
-    let size: CGSize
-    let isCircle: Bool
-    let cardPosition: CGPoint
-}
-
 // MARK: - Guide Overlay View
 
 struct GuideOverlayView: View {
     let engine: CognitiveLoadEngine
     let demoManager: DemoManager
     let s: CGFloat
+    let frames: [GuideID: CGRect]
     let dismiss: () -> Void
     
     @State private var currentStep = 0
@@ -38,46 +14,72 @@ struct GuideOverlayView: View {
     @State private var spotlightVisible = false
     @State private var ringPulse = false
     
-    private let totalSteps = 10
+    // Step order maps to GuideIDs
+    private let stepIDs: [GuideID] = [
+        .orb, .score, .clock, .duration,
+        .dnd, .sound, .reset, .analytics,
+        .demo, .end
+    ]
     
-    // Guide content for each step
-    private var steps: [(index: Int, label: String, desc: String, note: String?, hasIcon: Bool)] {
-        [
-            (1, "YOUR MIND, VISUALIZED",
-             "This 3D globe represents your cognitive load in real time. Color shifts from calm teal to stressed red as your attention fragments. Drag it to spin.",
-             nil, false),
-            (2, "COGNITIVE LOAD SCORE",
-             "0 is fully focused. 100 is overloaded. Score rises with distractions and decays naturally over time. The arrow shows current direction.",
-             nil, false),
-            (3, "SESSION CLOCK",
-             demoManager.isDemoMode
-                ? "Running at 120× speed — shows a full day of attention patterns in minutes so you can see Flow's full range."
-                : "Current time. Tracks your focus session from when you set your attention level.",
-             demoManager.isDemoMode ? "120× demo speed" : nil, false),
-            (4, "SESSION DURATION",
-             "Total time in your current focus session. Resets when you start a new one.",
-             nil, false),
-            (5, "DO NOT DISTURB",
-             "Toggles macOS Do Not Disturb so notifications don't break your flow. One tap silences everything — another brings them back.",
-             nil, false),
-            (6, "BINAURAL BEATS",
-             "Flow generates real-time procedural audio — layered binaural beats that shift frequency with your cognitive load. Low scores play calming alpha waves; high scores introduce grounding theta pulses to ease you back.",
-             "Wear headphones for full effect", false),
-            (7, "RESET",
-             "Guides your cognitive load score smoothly back to baseline. Use it after a break or context switch to start fresh without ending the session.",
-             nil, false),
-            (8, "ANALYTICS PANEL",
-             "Opens your attention timeline, 7-day history, and neuroscience insights about what's happening to your focus.",
-             nil, false),
-            (9, demoManager.isDemoMode ? "DEMO CONTROLS" : "SESSION CONTROLS",
-             demoManager.isDemoMode
-                ? "DEMO is auto-simulating distractions so you can see Flow react in real time. END closes this session and shows your full attention summary."
-                : "Flow is tracking real app switches and idle time via macOS system events. END closes the session and shows your stats.",
-             demoManager.isDemoMode ? "Auto-simulation active" : "Live system tracking active", false),
-            (10, "MENU BAR COMPANION",
-             "A mini orb lives in your macOS menu bar at all times. Click it to check your score or log events without switching windows.",
-             nil, true),
-        ]
+    private var totalSteps: Int { stepIDs.count }
+    
+    // Whether this step's highlight should be a circle
+    private func isCircle(for id: GuideID) -> Bool {
+        id == .orb || id == .analytics
+    }
+    
+    // Guide content for each GuideID
+    private func content(for id: GuideID) -> (label: String, desc: String, note: String?, hasIcon: Bool) {
+        switch id {
+        case .orb:
+            return ("YOUR MIND, VISUALIZED",
+                    "This 3D globe represents your cognitive load in real time. Color shifts from calm teal to stressed red as your attention fragments. Drag it to spin.",
+                    nil, false)
+        case .score:
+            return ("COGNITIVE LOAD SCORE",
+                    "0 is fully focused. 100 is overloaded. Score rises with distractions and decays naturally over time. The arrow shows current direction.",
+                    nil, false)
+        case .clock:
+            return ("SESSION CLOCK",
+                    demoManager.isDemoMode
+                    ? "Running at 120× speed — shows a full day of attention patterns in minutes so you can see Flow's full range."
+                    : "Current time. Tracks your focus session from when you set your attention level.",
+                    demoManager.isDemoMode ? "120× demo speed" : nil, false)
+        case .duration:
+            return ("SESSION DURATION",
+                    "Total time in your current focus session. Resets when you start a new one.",
+                    nil, false)
+        case .dnd:
+            return ("DO NOT DISTURB",
+                    "Toggles macOS Do Not Disturb so notifications don't break your flow. One tap silences everything — another brings them back.",
+                    nil, false)
+        case .sound:
+            return ("BINAURAL BEATS",
+                    "Flow generates real-time procedural audio — layered binaural beats that shift frequency with your cognitive load. Low scores play calming alpha waves; high scores introduce grounding theta pulses to ease you back.",
+                    "Wear headphones for full effect", false)
+        case .reset:
+            return ("RESET",
+                    "Guides your cognitive load score smoothly back to baseline. Use it after a break or context switch to start fresh without ending the session.",
+                    nil, false)
+        case .analytics:
+            return ("ANALYTICS PANEL",
+                    "Opens your attention timeline, 7-day history, and neuroscience insights about what's happening to your focus.",
+                    nil, false)
+        case .demo:
+            return (demoManager.isDemoMode ? "DEMO MODE" : "DEMO TOGGLE",
+                    demoManager.isDemoMode
+                    ? "Currently auto-simulating distractions so you can see Flow react in real time. Tap to switch to live tracking mode."
+                    : "Enables auto-simulation mode so you can explore Flow without real distractions.",
+                    demoManager.isDemoMode ? "Auto-simulation active" : nil, false)
+        case .end:
+            return ("END SESSION",
+                    "Closes your current focus session and shows your full attention summary — including timeline, peak score, and event breakdown.",
+                    nil, false)
+        case .menuBar:
+            return ("MENU BAR COMPANION",
+                    "A mini orb lives in your macOS menu bar at all times. Click it to check your score or log events without switching windows.",
+                    nil, true)
+        }
     }
     
     var body: some View {
@@ -85,49 +87,59 @@ struct GuideOverlayView: View {
             let w = geo.size.width
             let h = geo.size.height
             let color = FlowColors.color(for: engine.animatedScore)
-            let spec = currentStep < totalSteps
-                ? highlightSpec(for: steps[currentStep].index, w: w, h: h)
-                : highlightSpec(for: 1, w: w, h: h)
-            let cutoutW = spec.size.width + 20 * s
-            let cutoutH = spec.size.height + 20 * s
+            let currentID = stepIDs[currentStep]
+            let rect = frames[currentID] ?? CGRect(x: w/2 - 50, y: h/2 - 50, width: 100, height: 100)
+            let pad: CGFloat = 12 * s
+            let cutoutRect = rect.insetBy(dx: -pad, dy: -pad)
+            let isOrbLike = isCircle(for: currentID)
             
             ZStack {
                 // 1. Dark overlay with transparent cutout
                 Color.black.opacity(0.85)
                     .overlay {
                         Group {
-                            if spec.isCircle {
+                            if isOrbLike {
+                                let dim = max(cutoutRect.width, cutoutRect.height)
                                 Circle()
-                                    .frame(width: cutoutW, height: cutoutH)
+                                    .frame(width: dim, height: dim)
+                                    .position(
+                                        x: cutoutRect.midX,
+                                        y: cutoutRect.midY
+                                    )
                             } else {
                                 RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
-                                    .frame(width: cutoutW, height: cutoutH)
+                                    .frame(width: cutoutRect.width, height: cutoutRect.height)
+                                    .position(
+                                        x: cutoutRect.midX,
+                                        y: cutoutRect.midY
+                                    )
                             }
                         }
-                        .position(x: spec.center.x, y: spec.center.y)
                         .blendMode(.destinationOut)
                     }
                     .compositingGroup()
                     .ignoresSafeArea()
                     .onTapGesture { advance() }
                 
-                // 2. Glowing highlight ring around the feature
+                // 2. Glowing highlight ring
                 Group {
-                    if spec.isCircle {
+                    if isOrbLike {
+                        let dim = max(cutoutRect.width, cutoutRect.height)
                         Circle()
                             .stroke(color.opacity(0.6), lineWidth: 1.5)
-                            .frame(width: cutoutW, height: cutoutH)
+                            .frame(width: dim, height: dim)
+                            .position(x: cutoutRect.midX, y: cutoutRect.midY)
                     } else {
                         RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
                             .stroke(color.opacity(0.6), lineWidth: 1.5)
-                            .frame(width: cutoutW, height: cutoutH)
+                            .frame(width: cutoutRect.width, height: cutoutRect.height)
+                            .position(x: cutoutRect.midX, y: cutoutRect.midY)
                     }
                 }
                 .shadow(color: color.opacity(0.4), radius: 10)
                 .shadow(color: color.opacity(0.2), radius: 24)
                 .scaleEffect(ringPulse ? 1.03 : 1.0)
                 .opacity(ringPulse ? 0.7 : 1.0)
-                .position(x: spec.center.x, y: spec.center.y)
                 .opacity(spotlightVisible ? 1 : 0)
                 .allowsHitTesting(false)
                 .animation(
@@ -137,22 +149,54 @@ struct GuideOverlayView: View {
                 
                 // 3. Guide card positioned near the feature
                 if currentStep < totalSteps {
-                    let step = steps[currentStep]
+                    let info = content(for: currentID)
+                    let cardW: CGFloat = 200 * s
+                    let cardPos = cardPosition(
+                        for: cutoutRect,
+                        isOrb: isOrbLike,
+                        cardWidth: cardW,
+                        viewW: w, viewH: h
+                    )
+                    
                     GuideCard(
-                        index: step.index,
-                        label: step.label,
-                        desc: step.desc,
-                        note: step.note,
-                        hasIcon: step.hasIcon,
+                        label: info.label,
+                        desc: info.desc,
+                        note: info.note,
+                        hasIcon: info.hasIcon,
                         isVisible: $cardVisible,
                         s: s,
                         engine: engine
                     )
-                    .position(x: spec.cardPosition.x, y: spec.cardPosition.y)
+                    .position(x: cardPos.x, y: cardPos.y)
                     .transition(.opacity)
                 }
                 
-                // 4. Navigation row
+                // 4. Close button — top right
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button { dismiss() } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 12 * s, weight: .bold))
+                                .foregroundColor(.white.opacity(0.6))
+                                .frame(width: 28 * s, height: 28 * s)
+                                .background(
+                                    Circle()
+                                        .fill(.white.opacity(0.08))
+                                )
+                                .overlay(
+                                    Circle()
+                                        .stroke(.white.opacity(0.12), lineWidth: 0.5)
+                                )
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.top, 16 * s)
+                        .padding(.trailing, 16 * s)
+                    }
+                    Spacer()
+                }
+                
+                // 5. Navigation row
                 VStack {
                     Spacer()
                     HStack(spacing: 16 * s) {
@@ -189,6 +233,35 @@ struct GuideOverlayView: View {
         .onAppear { showStep() }
     }
     
+    // MARK: - Card Positioning
+    
+    /// Places the card above or below the highlighted element, clamped on-screen
+    private func cardPosition(for rect: CGRect, isOrb: Bool, cardWidth: CGFloat, viewW: CGFloat, viewH: CGFloat) -> CGPoint {
+        let cardH: CGFloat = 130 * s  // estimated card height
+        let gap: CGFloat = 14 * s
+        
+        // Is the element in the top or bottom half?
+        let isTop = rect.midY < viewH / 2
+        
+        let y: CGFloat
+        if isTop {
+            // Card goes below the element
+            y = rect.maxY + gap + cardH / 2
+        } else {
+            // Card goes above the element
+            y = rect.minY - gap - cardH / 2
+        }
+        
+        // Clamp Y so the card stays on screen
+        let clampedY = max(cardH / 2 + 10, min(viewH - cardH / 2 - 80 * s, y))
+        
+        // X: center on element, clamped to stay on screen
+        let halfW = cardWidth / 2
+        let clampedX = max(halfW + 16 * s, min(viewW - halfW - 16 * s, rect.midX))
+        
+        return CGPoint(x: clampedX, y: clampedY)
+    }
+    
     // MARK: - Step Navigation
     
     private func advance() {
@@ -217,162 +290,11 @@ struct GuideOverlayView: View {
             ringPulse = true
         }
     }
-    
-    // MARK: - Highlight Positions
-    
-    private func highlightSpec(for index: Int, w: CGFloat, h: CGFloat) -> HighlightSpec {
-        let pad: CGFloat = 28 * s
-        let cardHalfW: CGFloat = 100 * s   // card is 200*s wide
-        let cardHalfH: CGFloat = 65 * s    // estimated half-height of card
-        let gap: CGFloat = 16 * s          // gap between feature and card
-        
-        // Clamp card X so it doesn't go off screen
-        func clampX(_ x: CGFloat) -> CGFloat {
-            max(pad + cardHalfW, min(w - pad - cardHalfW, x))
-        }
-        
-        // Top features: y center of top control row
-        let topY: CGFloat = 54 * s
-        // Bottom features: y center of bottom control row
-        let btnY: CGFloat = h - 38 * s
-        
-        switch index {
-        case 1: // Orb — center
-            let orbSize = min(max(min(w, h) * 0.52, 180), 700)
-            let orbCY = h / 2 - 30 * s
-            return HighlightSpec(
-                center: CGPoint(x: w / 2, y: orbCY),
-                size: CGSize(width: orbSize, height: orbSize),
-                isCircle: true,
-                cardPosition: CGPoint(
-                    x: w / 2,
-                    y: orbCY + orbSize / 2 + gap + cardHalfH + 30 * s
-                )
-            )
-            
-        case 2: // Score — top center
-            return HighlightSpec(
-                center: CGPoint(x: w / 2, y: topY),
-                size: CGSize(width: 140 * s, height: 90 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: w / 2,
-                    y: topY + 45 * s + gap + cardHalfH
-                )
-            )
-            
-        case 3: // Clock — top left
-            let clockX = pad + 105 * s
-            return HighlightSpec(
-                center: CGPoint(x: clockX, y: topY),
-                size: CGSize(width: 220 * s, height: 76 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(clockX),
-                    y: topY + 38 * s + gap + cardHalfH
-                )
-            )
-            
-        case 4: // Session duration — top right
-            let durX = w - pad - 85 * s
-            return HighlightSpec(
-                center: CGPoint(x: durX, y: topY),
-                size: CGSize(width: 170 * s, height: 90 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(durX),
-                    y: topY + 45 * s + gap + cardHalfH
-                )
-            )
-            
-        case 5: // DND — bottom left, first button
-            let dndX = pad + 47 * s
-            return HighlightSpec(
-                center: CGPoint(x: dndX, y: btnY),
-                size: CGSize(width: 95 * s, height: 44 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(dndX),
-                    y: btnY - 22 * s - gap - cardHalfH
-                )
-            )
-            
-        case 6: // Sound (Binaural Beats) — bottom left, second button
-            let sndX = pad + 146 * s
-            return HighlightSpec(
-                center: CGPoint(x: sndX, y: btnY),
-                size: CGSize(width: 88 * s, height: 44 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(sndX),
-                    y: btnY - 22 * s - gap - cardHalfH
-                )
-            )
-            
-        case 7: // Reset — bottom left, third button
-            let rstX = pad + 252 * s
-            return HighlightSpec(
-                center: CGPoint(x: rstX, y: btnY),
-                size: CGSize(width: 110 * s, height: 44 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(rstX),
-                    y: btnY - 22 * s - gap - cardHalfH
-                )
-            )
-            
-        case 8: // Analytics chevron — bottom center
-            return HighlightSpec(
-                center: CGPoint(x: w / 2, y: btnY),
-                size: CGSize(width: 44 * s, height: 44 * s),
-                isCircle: true,
-                cardPosition: CGPoint(
-                    x: w / 2,
-                    y: btnY - 22 * s - gap - cardHalfH
-                )
-            )
-            
-        case 9: // Demo / End — bottom right
-            let grpW: CGFloat = 160 * s
-            let grpX = w - pad - grpW / 2
-            return HighlightSpec(
-                center: CGPoint(x: grpX, y: btnY),
-                size: CGSize(width: grpW + 10 * s, height: 44 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(grpX),
-                    y: btnY - 22 * s - gap - cardHalfH
-                )
-            )
-            
-        case 10: // Menu bar — top right edge
-            let mbX = w - 60 * s
-            let mbY: CGFloat = 14 * s
-            return HighlightSpec(
-                center: CGPoint(x: mbX, y: mbY),
-                size: CGSize(width: 44 * s, height: 28 * s),
-                isCircle: false,
-                cardPosition: CGPoint(
-                    x: clampX(mbX),
-                    y: mbY + 14 * s + gap + cardHalfH
-                )
-            )
-            
-        default:
-            return HighlightSpec(
-                center: CGPoint(x: w / 2, y: h / 2),
-                size: CGSize(width: 100, height: 100),
-                isCircle: false,
-                cardPosition: CGPoint(x: w / 2, y: h / 2 + 120)
-            )
-        }
-    }
 }
 
 // MARK: - Guide Card Component
 
 struct GuideCard: View {
-    let index: Int
     let label: String
     let desc: String
     let note: String?

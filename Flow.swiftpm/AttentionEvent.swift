@@ -13,11 +13,11 @@ enum AttentionEvent: String, CaseIterable, Identifiable {
     
     var loadIncrease: Double {
         switch self {
-        case .appSwitch: return 8
-        case .notification: return 6
-        case .mindWandered: return 5
-        case .idle: return 7
-        case .rapidSwitch: return 10
+        case .appSwitch: return 4
+        case .notification: return 3
+        case .mindWandered: return 2
+        case .idle: return 3
+        case .rapidSwitch: return 5
         }
     }
     

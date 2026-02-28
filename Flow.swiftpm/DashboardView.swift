@@ -37,6 +37,7 @@ struct DashboardView: View {
                     let orbSize = min(max(min(geo.size.width, geo.size.height) * 0.52, 180), 700)
                     VStack(spacing: 20 * s) {
                         FocusOrbView(score: engine.animatedScore, size: orbSize)
+                            .guideTag(.orb)
                         
                         VStack(spacing: 8 * s) {
                             // State label
@@ -112,20 +113,27 @@ struct DashboardView: View {
                     .transition(.opacity)
                     .zIndex(200)
             }
-            
-            // Guide Overlay
+        }
+        .overlayPreferenceValue(GuideFrameKey.self) { anchors in
+            // Guide Overlay — renders on top with real anchored frames
             if showGuide {
-                GuideOverlayView(
-                    engine: engine,
-                    demoManager: demoManager,
-                    s: s,
-                    dismiss: {
-                        withAnimation(.easeOut(duration: 0.25)) {
-                            showGuide = false
-                            hasSeenGuide = true
-                        }
+                GeometryReader { proxy in
+                    let frames = anchors.reduce(into: [GuideID: CGRect]()) { dict, pair in
+                        dict[pair.key] = proxy[pair.value]
                     }
-                )
+                    GuideOverlayView(
+                        engine: engine,
+                        demoManager: demoManager,
+                        s: s,
+                        frames: frames,
+                        dismiss: {
+                            withAnimation(.easeOut(duration: 0.25)) {
+                                showGuide = false
+                                hasSeenGuide = true
+                            }
+                        }
+                    )
+                }
                 .transition(.opacity)
                 .zIndex(175)
             }
@@ -182,6 +190,7 @@ struct DashboardView: View {
             // Leading: Flip clock
             HStack {
                 CompactFlipClockView(date: currentTime)
+                    .guideTag(.clock)
                 Spacer()
             }
             .frame(maxWidth: .infinity)
@@ -197,6 +206,7 @@ struct DashboardView: View {
                 // Stock-style trend arrow
                 trendIndicator
             }
+            .guideTag(.score)
             .frame(maxWidth: .infinity, alignment: .center)
             
             // Trailing: Session stopwatch in soft box
@@ -223,6 +233,7 @@ struct DashboardView: View {
                     RoundedRectangle(cornerRadius: 12 * s, style: .continuous)
                         .stroke(.white.opacity(0.04), lineWidth: 0.5)
                 )
+                .guideTag(.duration)
             }
             .frame(maxWidth: .infinity)
         }
@@ -288,6 +299,7 @@ struct DashboardView: View {
             }
             .buttonStyle(.plain)
             .focusable(false)
+            .guideTag(.analytics)
             
             // Leading: DND + Sound toggle
             HStack {
@@ -331,6 +343,7 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
+                    .guideTag(.dnd)
                     .keyboardShortcut("f", modifiers: .command)
                     
                     soundToggle
@@ -346,6 +359,7 @@ struct DashboardView: View {
                                 .stroke(.white.opacity(0.04), lineWidth: 0.5)
                         )
                         .animation(.easeOut(duration: 0.25), value: audio.isMuted)
+                        .guideTag(.sound)
                 }
                 
                     // Reset button
@@ -374,6 +388,7 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
+                    .guideTag(.reset)
                     
                     // Help button (Coach Mark Guide)
                     if !showRecovery && !sessionManager.showingSummary && !showSessionStart && !showDNDLoading {
@@ -467,6 +482,7 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
+                    .guideTag(.demo)
                     
                     // End Session
                     Button {
@@ -488,6 +504,7 @@ struct DashboardView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
+                    .guideTag(.end)
                 }
             }
         }

@@ -266,3 +266,24 @@ struct FlowAnimation {
     static let breatheHold: Double = 7.0
     static let breatheOut: Double = 8.0
 }
+
+// MARK: - Guide Element IDs (for anchor-based spotlights)
+
+enum GuideID: String, CaseIterable {
+    case orb, score, clock, duration
+    case dnd, sound, reset, analytics
+    case demo, end, menuBar
+}
+
+struct GuideFrameKey: PreferenceKey {
+    static var defaultValue: [GuideID: Anchor<CGRect>] = [:]
+    static func reduce(value: inout [GuideID: Anchor<CGRect>], nextValue: () -> [GuideID: Anchor<CGRect>]) {
+        value.merge(nextValue(), uniquingKeysWith: { $1 })
+    }
+}
+
+extension View {
+    func guideTag(_ id: GuideID) -> some View {
+        self.anchorPreference(key: GuideFrameKey.self, value: .bounds) { [id: $0] }
+    }
+}
