@@ -22,7 +22,26 @@ struct CognitiveLoadGraphView: View {
                 .tracking(1.5)
             
             Chart {
-                // Main line only — no AreaMark for performance
+                // Subtle area fill under the line for visual depth
+                ForEach(displayHistory) { snapshot in
+                    AreaMark(
+                        x: .value("Time", snapshot.timestamp),
+                        y: .value("Load", snapshot.score)
+                    )
+                    .foregroundStyle(
+                        .linearGradient(
+                            colors: [
+                                .clear,
+                                lineGradientColors.last?.opacity(0.18) ?? .cyan.opacity(0.18)
+                            ],
+                            startPoint: .bottom,
+                            endPoint: .top
+                        )
+                    )
+                    .interpolationMethod(.monotone)
+                }
+                
+                // Main line — left-to-right gradient following actual score colors
                 ForEach(displayHistory) { snapshot in
                     LineMark(
                         x: .value("Time", snapshot.timestamp),
@@ -30,19 +49,12 @@ struct CognitiveLoadGraphView: View {
                     )
                     .foregroundStyle(
                         .linearGradient(
-                            colors: [
-                                FlowColors.color(for: 0),
-                                FlowColors.color(for: 25),
-                                FlowColors.color(for: 50),
-                                FlowColors.color(for: 70),
-                                FlowColors.color(for: 85),
-                                FlowColors.color(for: 100)
-                            ],
-                            startPoint: .bottom,
-                            endPoint: .top
+                            colors: lineGradientColors,
+                            startPoint: .leading,
+                            endPoint: .trailing
                         )
                     )
-                    .lineStyle(StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+                    .lineStyle(StrokeStyle(lineWidth: 2.5, lineCap: .round, lineJoin: .round))
                     .interpolationMethod(.monotone)
                 }
                 
@@ -136,6 +148,23 @@ struct CognitiveLoadGraphView: View {
             return start...now
         }
         return now.addingTimeInterval(-60)...now
+    }
+    
+    /// Samples score-based colors from the history for a left-to-right line gradient.
+    /// Generates up to ~12 evenly-spaced color stops so the gradient tracks the actual score over time.
+    private var lineGradientColors: [Color] {
+        guard !displayHistory.isEmpty else { return [FlowColors.color(for: 0)] }
+        guard displayHistory.count > 1 else {
+            return [FlowColors.color(for: displayHistory[0].score)]
+        }
+        let step = max(1, displayHistory.count / 12)
+        var colors: [Color] = []
+        for i in stride(from: 0, to: displayHistory.count, by: step) {
+            colors.append(FlowColors.color(for: displayHistory[i].score))
+        }
+        // Always include the last data point
+        colors.append(FlowColors.color(for: displayHistory.last!.score))
+        return colors
     }
     
     // Refresh chart data every second; mark ready once data exists
