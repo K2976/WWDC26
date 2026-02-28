@@ -21,7 +21,9 @@ struct DashboardView: View {
     @State private var showDNDLoading = false
     
     @AppStorage("hasSeenGuide") var hasSeenGuide: Bool = false
+    @AppStorage("hasSeenHeadphonePrompt") private var hasSeenHeadphonePrompt: Bool = false
     @State var showGuide: Bool = false
+    @State private var showHeadphonePrompt: Bool = false
     
     private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -112,6 +114,57 @@ struct DashboardView: View {
                     .ignoresSafeArea()
                     .transition(.opacity)
                     .zIndex(200)
+            }
+            
+            // Headphone prompt toast
+            if showHeadphonePrompt {
+                VStack {
+                    Spacer()
+                    HStack(spacing: 10 * s) {
+                        Image(systemName: "headphones")
+                            .font(.system(size: 20 * s, weight: .medium))
+                            .foregroundColor(.white.opacity(0.9))
+                        
+                        VStack(alignment: .leading, spacing: 3 * s) {
+                            Text("Wear Headphones")
+                                .font(.system(size: 13 * s, weight: .semibold, design: .rounded))
+                                .foregroundColor(.white.opacity(0.9))
+                            Text("Binaural beats require headphones to work — each ear receives a different frequency.")
+                                .font(.system(size: 11 * s, weight: .regular, design: .rounded))
+                                .foregroundColor(.white.opacity(0.5))
+                                .lineLimit(2)
+                        }
+                        
+                        Spacer()
+                        
+                        Button {
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                showHeadphonePrompt = false
+                            }
+                        } label: {
+                            Image(systemName: "xmark")
+                                .font(.system(size: 10 * s, weight: .bold))
+                                .foregroundColor(.white.opacity(0.4))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal, 16 * s)
+                    .padding(.vertical, 12 * s)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                            .environment(\.colorScheme, .dark)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14 * s, style: .continuous)
+                            .stroke(.white.opacity(0.08), lineWidth: 0.5)
+                    )
+                    .shadow(color: .black.opacity(0.5), radius: 20, y: 8)
+                    .padding(.horizontal, 40 * s)
+                    .padding(.bottom, 90 * s)
+                }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(250)
             }
         }
         .overlayPreferenceValue(GuideFrameKey.self) { anchors in
@@ -525,6 +578,18 @@ struct DashboardView: View {
                     audio.stopAmbient()
                 } else {
                     audio.startAmbient()
+                    // Show headphone prompt on first unmute
+                    if !hasSeenHeadphonePrompt {
+                        hasSeenHeadphonePrompt = true
+                        withAnimation(.spring(response: 0.5, dampingFraction: 0.85)) {
+                            showHeadphonePrompt = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                            withAnimation(.easeOut(duration: 0.4)) {
+                                showHeadphonePrompt = false
+                            }
+                        }
+                    }
                 }
             }
         } label: {
